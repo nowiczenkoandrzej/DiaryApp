@@ -1,4 +1,4 @@
-package com.an.diaryapp.core.presentation.components
+package com.an.diaryapp.feature_note_list.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth

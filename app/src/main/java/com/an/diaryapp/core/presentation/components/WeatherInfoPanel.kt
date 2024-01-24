@@ -28,7 +28,6 @@ fun WeatherInfoPanel(
 
         Text(text = "$location:")
         Text(text = "${weatherInfo?.temperature}:")
-        Text(text = "${weatherInfo?.weatherType}:")
         Spacer(modifier = Modifier.weight(1F))
         IconButton(onClick = { onTrackLocationClick() }) {
             Icon(

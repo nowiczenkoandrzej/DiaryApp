@@ -14,7 +14,8 @@ import androidx.compose.ui.unit.dp
 fun DetailsScreen(
     viewModel: DetailsViewModel
 ) {
-    
+
+
     val note = viewModel
         .note
         .collectAsState()

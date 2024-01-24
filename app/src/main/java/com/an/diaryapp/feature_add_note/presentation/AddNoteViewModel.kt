@@ -1,5 +1,6 @@
 package com.an.diaryapp.feature_add_note.presentation
 
+import android.location.Geocoder
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddNoteViewModel @Inject constructor(
     private val repository: NotesRepository,
-    private val locationTracker: LocationTracker
+    private val locationTracker: LocationTracker,
+    private val geocoder: Geocoder
 ): ViewModel() {
 
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
@@ -92,26 +94,38 @@ class AddNoteViewModel @Inject constructor(
 
     fun getWeatherInfo() {
         viewModelScope.launch {
-            Log.d("dupa", "getWeatherInfo: przed pobraniem lokalizacji")
+
             locationTracker.getCurrentLocation()?.let { location ->
-                Log.d("dupa", "getWeatherInfo: ${location.latitude}, ${location.longitude}")
+
                 val result = repository.getWeatherInfo(
                     lat = location.latitude,
                     long = location.longitude
                 )
 
+                val address = geocoder.getFromLocation(
+                    location.latitude,
+                    location.longitude,
+                    1,
+                )
 
+                val locationCity = address?.let { adresses ->
+                    address[0].locality
+                }
+
+                locationCity?.let {
+                    _screenState.value = screenState.value.copy(
+                        location = it
+                    )
+                }
 
                 when(result) {
                     is Resource.Success -> {
                         _screenState.value = screenState.value.copy(
                             weatherInfo = result.data
                         )
-                        Log.d("dupa", "getWeatherInfo: success : ${result.data}")
-
                     }
                     is Resource.Error -> {
-                        Log.d("dupa", "getWeatherInfo: error: ${result.error}")
+
                     }
                 }
             }

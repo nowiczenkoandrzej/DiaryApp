@@ -55,7 +55,6 @@ fun AddNoteScreen(
             location = state.location,
             weatherInfo = state.weatherInfo,
             onTrackLocationClick = {
-                Log.d("dupa", "AddNoteScreen: ")
                 viewModel.getWeatherInfo()
             }
         )
@@ -66,20 +65,22 @@ fun AddNoteScreen(
             onValueChange = viewModel::setDescription,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp),
+                .weight(1F),
 
             )
 
-        Button(onClick = {
-
-            if(viewModel.screenState.value.description.isNotEmpty()) {
-
-                viewModel.addNote()
-                navController.navigate(Screen.DiaryNotesList.route)
-            }
-
-        }) {
-            Text(text = "Add")
+        Button(
+            onClick = {
+                if(viewModel.screenState.value.description.isNotEmpty()) {
+                    viewModel.addNote()
+                    navController.navigate(Screen.DiaryNotesList.route)
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Add new Note"
+            )
         }
     }
 
