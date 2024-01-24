@@ -1,0 +1,25 @@
+package com.an.diaryapp.core.domain
+
+import com.an.diaryapp.core.domain.model.Category
+import com.an.diaryapp.core.domain.model.NoteItem
+import com.an.diaryapp.core.domain.model.Resource
+import com.an.diaryapp.core.domain.model.WeatherInfo
+
+interface NotesRepository {
+
+    suspend fun getAllCategories(): Resource<List<Category>>
+
+    suspend fun getNotes(content: String = ""): Resource<List<NoteItem>>
+
+    suspend fun getNoteById(id: Long): Resource<NoteItem>
+
+    suspend fun addNote(note: NoteItem)
+
+    suspend fun deleteNote(id: Long)
+
+    suspend fun getWeatherInfo(
+        lat: Double,
+        long: Double
+    ): Resource<WeatherInfo>
+
+}

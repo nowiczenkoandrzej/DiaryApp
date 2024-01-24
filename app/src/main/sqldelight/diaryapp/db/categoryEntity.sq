@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS categoryEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    background_color TEXT NOT NULL,
+    name TEXT NOT NULL
+);
+

@@ -1,0 +1,136 @@
+CREATE TABLE IF NOT EXISTS noteEntity  (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    description TEXT NOT NULL,
+    timestamp TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    weather_id INTEGER,
+    location TEXT,
+    FOREIGN KEY (weather_id) REFERENCES weatherEntity(id)
+);
+
+
+
+CREATE TABLE IF NOT EXISTS notes_categories (
+    note_id INTEGER,
+    category_id INTEGER,
+    PRIMARY KEY (note_id, category_id)
+);
+
+getNoteById:
+SELECT
+    noteEntity.id AS note_id,
+    noteEntity.description,
+    noteEntity.timestamp,
+    noteEntity.weather_id,
+    noteEntity.location,
+    weatherEntity.temperature,
+    weatherEntity.weather_type,
+    categoryEntity.id AS category_id,
+    categoryEntity.background_color,
+    categoryEntity.name
+FROM
+    noteEntity
+LEFT JOIN
+    weatherEntity ON noteEntity.weather_id = weatherEntity.id
+LEFT JOIN
+    notes_categories ON noteEntity.id = notes_categories.note_id
+LEFT JOIN
+    categoryEntity ON notes_categories.category_id = categoryEntity.id
+WHERE noteEntity.id = :id;
+
+getNotesByContent:
+SELECT
+    noteEntity.id AS note_id,
+    noteEntity.description,
+    noteEntity.timestamp,
+    noteEntity.weather_id,
+    noteEntity.location,
+    weatherEntity.temperature,
+    weatherEntity.weather_type,
+    categoryEntity.id AS category_id,
+    categoryEntity.background_color,
+    categoryEntity.name
+FROM
+    noteEntity
+LEFT JOIN
+    weatherEntity ON noteEntity.weather_id = weatherEntity.id
+LEFT JOIN
+    notes_categories ON noteEntity.id = notes_categories.note_id
+LEFT JOIN
+    categoryEntity ON notes_categories.category_id = categoryEntity.id
+WHERE noteEntity.description LIKE ('%' || :content || '%');
+
+
+getAllNotes:
+SELECT *
+FROM noteEntity;
+
+getNotes:
+SELECT
+    noteEntity.id AS note_id,
+    noteEntity.description,
+    noteEntity.timestamp,
+    noteEntity.weather_id,
+    noteEntity.location,
+    weatherEntity.temperature,
+    weatherEntity.weather_type,
+    categoryEntity.id AS category_id,
+    categoryEntity.background_color,
+    categoryEntity.name
+FROM
+    noteEntity
+LEFT JOIN
+    weatherEntity ON noteEntity.weather_id = weatherEntity.id
+LEFT JOIN
+    notes_categories ON noteEntity.id = notes_categories.note_id
+LEFT JOIN
+    categoryEntity ON notes_categories.category_id = categoryEntity.id;
+
+
+insertNote:
+INSERT OR REPLACE
+INTO noteEntity
+VALUES(?, ?, ?, ?, ?);
+
+insertWeatherInfo:
+INSERT OR REPLACE
+INTO weatherEntity
+VALUES (?,?,?);
+
+getLastWeatherInfoIndex:
+SELECT id
+FROM weatherEntity
+ORDER BY id DESC
+LIMIT 1;
+
+getLastNoteIndex:
+SELECT id
+FROM noteEntity
+ORDER BY id DESC
+LIMIT 1;
+
+getAllCategories:
+SELECT *
+FROM categoryEntity;
+
+addNewCategory:
+INSERT OR REPLACE
+INTO categoryEntity
+VALUES (?, ?, ?);
+
+deleteNote:
+DELETE FROM noteEntity
+WHERE id = :id;
+
+insertNotesCategories:
+INSERT OR REPLACE
+INTO notes_categories
+VALUES (?,?);
+
+
+
+INSERT INTO categoryEntity (background_color, name) VALUES ('0xFFD6D6D6', 'Family');
+INSERT INTO categoryEntity (background_color, name) VALUES ('0xFF85BFCD', 'Friends');
+INSERT INTO categoryEntity (background_color, name) VALUES ('0xFF27A2BB', 'Work');
+INSERT INTO categoryEntity (background_color, name) VALUES ('0xFFF4B076', 'School');
+INSERT INTO categoryEntity (background_color, name) VALUES ('0xFFFAB10C', 'Hobby');
+INSERT INTO categoryEntity (background_color, name) VALUES ('0xFF85BFCD', 'Cooking');

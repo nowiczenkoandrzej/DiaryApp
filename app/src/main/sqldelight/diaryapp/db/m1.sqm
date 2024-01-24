@@ -1,0 +1,2 @@
+ALTER TABLE noteEntity
+ADD COLUMN location TEXT;
