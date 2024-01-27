@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import com.an.diaryapp.core.domain.model.Category
 import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.core.presentation.components.CategoryItem
+import com.an.diaryapp.core.presentation.components.WeatherDisplay
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -72,8 +73,6 @@ fun NoteListItem(
             } else {
                 noteItem.timestamp.dayOfMonth.toString()
             }
-
-
 
             Text(
                 text = displayedDay,
@@ -119,8 +118,13 @@ fun NoteListItem(
                 maxLines = 5,
                 overflow = TextOverflow.Ellipsis
             )
+            Spacer(modifier = Modifier.height(8.dp))
             noteItem.weatherInfo?.let { weatherInfo ->
-                Text(text = weatherInfo.temperature.toString())
+                WeatherDisplay(
+                    weatherInfo = weatherInfo,
+                    location = noteItem.location ?: "",
+                    modifier = Modifier.fillMaxWidth()
+                )
 
             }
         }

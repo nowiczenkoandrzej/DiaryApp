@@ -51,6 +51,9 @@ class AddNoteViewModel @Inject constructor(
         }
     }
 
+
+
+
     fun selectCategory(category: Category) {
 
         val newList = ArrayList(screenState.value.selectedCategory)
@@ -82,12 +85,12 @@ class AddNoteViewModel @Inject constructor(
 
             repository.addNote(
                 NoteItem(
-                description = state.description,
-                timestamp = LocalDate.now(),
-                categories = state.selectedCategory,
-                weatherInfo = state.weatherInfo,
-                location = state.location
-            )
+                    description = state.description,
+                    timestamp = state.timestamp,
+                    categories = state.selectedCategory,
+                    weatherInfo = state.weatherInfo,
+                    location = state.location
+                )
             )
         }
     }

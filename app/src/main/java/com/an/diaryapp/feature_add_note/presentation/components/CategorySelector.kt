@@ -1,4 +1,4 @@
-package com.an.diaryapp.core.presentation.components
+package com.an.diaryapp.feature_add_note.presentation.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.an.diaryapp.core.domain.model.Category
+import com.an.diaryapp.core.presentation.components.CategoryItem
 import java.lang.Long
 
 @Composable

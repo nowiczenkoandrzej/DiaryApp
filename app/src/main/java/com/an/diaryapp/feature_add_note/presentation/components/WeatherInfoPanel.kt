@@ -1,4 +1,4 @@
-package com.an.diaryapp.core.presentation.components
+package com.an.diaryapp.feature_add_note.presentation.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,6 +37,7 @@ fun WeatherInfoPanel(
         }
 
     }
+    
 
 
 }

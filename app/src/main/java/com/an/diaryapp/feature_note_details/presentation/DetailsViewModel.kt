@@ -28,7 +28,7 @@ class DetailsViewModel @Inject constructor(
 
             when(note) {
                 is Resource.Error -> {
-                    Log.d("dupa", "getNoteById: ${note.error}")
+
                 }
                 is Resource.Success -> _note.value = note.data
             }

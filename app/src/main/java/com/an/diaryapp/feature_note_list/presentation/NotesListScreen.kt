@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import com.an.diaryapp.core.domain.model.Screen
+import com.an.diaryapp.feature_note_list.domain.model.NoteListEvent
 import com.an.diaryapp.feature_note_list.presentation.components.ListCategory
 import com.an.diaryapp.feature_note_list.presentation.components.DeleteNoteDialog
 import com.an.diaryapp.feature_note_list.presentation.components.NoteListItem
@@ -36,8 +37,8 @@ fun NotesListScreen(
     navController: NavController
 ) {
 
-    val notesList = viewModel
-        .notesState
+    val state = viewModel
+        .screenState
         .collectAsState()
         .value
 
@@ -56,7 +57,9 @@ fun NotesListScreen(
                 deletedNoteId = 0
             },
             onConfirmation = {
-                viewModel.removeNote(deletedNoteId)
+                viewModel.onEvent(NoteListEvent.RemoveNote(deletedNoteId))
+
+                //viewModel.removeNote(deletedNoteId)
                 showDeleteNoteDialog = false
                 deletedNoteId = 0
             },
@@ -76,9 +79,9 @@ fun NotesListScreen(
         when(lifecycleState) {
             Lifecycle.State.DESTROYED -> {}
             Lifecycle.State.INITIALIZED -> {}
-            Lifecycle.State.CREATED -> {viewModel.getNotes()}
+            Lifecycle.State.CREATED -> {viewModel.onEvent(NoteListEvent.GetNotes())}
             Lifecycle.State.STARTED -> {}
-            Lifecycle.State.RESUMED -> {viewModel.getNotes()}
+            Lifecycle.State.RESUMED -> {viewModel.onEvent(NoteListEvent.GetNotes())}
         }
     }
 
@@ -87,7 +90,8 @@ fun NotesListScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        val grouped = notesList.groupBy { it.timestamp.month }
+
+        val grouped = state.notes.groupBy { it.timestamp.month }
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
