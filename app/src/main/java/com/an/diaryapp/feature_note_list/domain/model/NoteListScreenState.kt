@@ -4,5 +4,6 @@ import com.an.diaryapp.core.domain.model.NoteItem
 
 data class NoteListScreenState(
     val notes: List<NoteItem> = emptyList(),
-    val searchBarText: String = ""
+    val searchBarText: String = "",
+    val isSearchBarActive: Boolean = false
 )

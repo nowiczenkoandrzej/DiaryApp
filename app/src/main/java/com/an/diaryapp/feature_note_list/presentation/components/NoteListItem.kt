@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -49,83 +52,90 @@ fun NoteListItem(
     var columnHeightDp by remember {
         mutableStateOf(0.dp)
     }
-    
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(4.dp)
-            .combinedClickable(
-                onClick = { onClick(noteItem) },
-                onLongClick = { onLongClick() }
-            ),
-        horizontalArrangement = Arrangement.Start
+
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        ),
+        shape = MaterialTheme.shapes.large
     ) {
-        Column(
+        Row(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(4.dp)
-                .height(columnHeightDp),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally,
+                .combinedClickable(
+                    onClick = { onClick(noteItem) },
+                    onLongClick = { onLongClick() }
+                ),
+            horizontalArrangement = Arrangement.Start
         ) {
-
-            val displayedDay = if (noteItem.timestamp.dayOfMonth < 10) {
-                "0${noteItem.timestamp.dayOfMonth}"
-            } else {
-                noteItem.timestamp.dayOfMonth.toString()
-            }
-
-            Text(
-                text = displayedDay,
-                fontSize = 32.sp,
+            Column(
                 modifier = Modifier
-                    .padding(8.dp)
-            )
-            if(columnHeightDp > 100.dp) {
-                Spacer(modifier = Modifier.height(8 .dp))
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(16.dp))
-                        .width(6.dp)
-                        .background(color = Color.LightGray)
-                        .weight(1F)
+                    .padding(4.dp)
+                    .height(columnHeightDp),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
 
+                val displayedDay = if (noteItem.timestamp.dayOfMonth < 10) {
+                    "0${noteItem.timestamp.dayOfMonth}"
+                } else {
+                    noteItem.timestamp.dayOfMonth.toString()
+                }
+
+                Text(
+                    text = displayedDay,
+                    fontSize = 32.sp,
+                    modifier = Modifier
+                        .padding(8.dp)
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                if(columnHeightDp > 100.dp) {
+                    Spacer(modifier = Modifier.height(8 .dp))
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(16.dp))
+                            .width(6.dp)
+                            .background(color = Color.LightGray)
+                            .weight(1F)
+
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+
             }
 
-        }
-
-        Column(
-            modifier = Modifier
-                .weight(1F)
-                .padding(4.dp)
-                .onGloballyPositioned {
-                    columnHeightDp = with(localDensity) {
-                        if (it.size.height.toDp() < 60.dp)
-                            60.dp
-                        else
-                            it.size.height.toDp()
+            Column(
+                modifier = Modifier
+                    .weight(1F)
+                    .padding(4.dp)
+                    .onGloballyPositioned {
+                        columnHeightDp = with(localDensity) {
+                            if (it.size.height.toDp() < 60.dp)
+                                60.dp
+                            else
+                                it.size.height.toDp()
+                        }
+                    }
+            ) {
+                Row {
+                    noteItem.categories.forEach { category ->
+                        CategoryItem(category = category)
                     }
                 }
-        ) {
-            Row {
-                noteItem.categories.forEach { category ->
-                    CategoryItem(category = category)
-                }
-            }
-            Text(
-                text = noteItem.description,
-                maxLines = 5,
-                overflow = TextOverflow.Ellipsis
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            noteItem.weatherInfo?.let { weatherInfo ->
-                WeatherDisplay(
-                    weatherInfo = weatherInfo,
-                    location = noteItem.location ?: "",
-                    modifier = Modifier.fillMaxWidth()
+                Text(
+                    text = noteItem.description,
+                    maxLines = 5,
+                    overflow = TextOverflow.Ellipsis
                 )
+                Spacer(modifier = Modifier.height(8.dp))
+                noteItem.weatherInfo?.let { weatherInfo ->
+                    WeatherDisplay(
+                        weatherInfo = weatherInfo,
+                        location = noteItem.location ?: "",
+                        modifier = Modifier.fillMaxWidth()
+                    )
 
+                }
             }
         }
     }
