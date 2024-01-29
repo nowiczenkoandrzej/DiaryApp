@@ -9,5 +9,6 @@ data class AddNoteScreenState(
     val selectedCategory: List<Category> = emptyList(),
     val weatherInfo: WeatherInfo? = null,
     val location: String? = null,
-    val timestamp: LocalDate = LocalDate.now()
+    val timestamp: LocalDate = LocalDate.now(),
+    val isDatePickerVisible: Boolean = false
 )

@@ -9,10 +9,13 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -20,6 +23,9 @@ import com.an.diaryapp.core.domain.model.Screen
 import com.an.diaryapp.feature_add_note.presentation.components.CategorySelector
 import com.an.diaryapp.feature_add_note.presentation.components.DateSelector
 import com.an.diaryapp.feature_add_note.presentation.components.WeatherInfoPanel
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
 @RequiresApi(34)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,6 +45,16 @@ fun AddNoteScreen(
         .screenState
         .collectAsState()
         .value
+
+    /*val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = Instant.now().toEpochMilli()
+    )*/
+
+    val datePickerState = rememberDatePickerState(selectableDates = object : SelectableDates {
+        override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+            return utcTimeMillis <= System.currentTimeMillis()
+        }
+    })
 
     Column(
         modifier = Modifier
@@ -61,7 +77,20 @@ fun AddNoteScreen(
                 viewModel.getWeatherInfo()
             }
         )
-        DateSelector()
+        DateSelector(
+            datePickerState = datePickerState,
+            isDatePickerVisible = state.isDatePickerVisible,
+            selectedDate = state.timestamp,
+            onConfirm = { date ->
+                viewModel.setTimestamp(date                    )
+            },
+            onDismiss = {
+                viewModel.showOrHideDatePickerDialog()
+            },
+            onIconClick = {
+                viewModel.showOrHideDatePickerDialog()
+            }
+        )
 
 
         BasicTextField(

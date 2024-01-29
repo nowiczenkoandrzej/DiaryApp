@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,30 +24,41 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(34)
 @Composable
-fun DateSelector() {
+fun DateSelector(
+    datePickerState: DatePickerState,
+    selectedDate: LocalDate,
+    isDatePickerVisible: Boolean,
+    onConfirm: (LocalDate) -> Unit,
+    onDismiss: () -> Unit,
+    onIconClick: () -> Unit,
+) {
+    
 
-    val datePickerState = rememberDatePickerState(
+    /*val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = Instant.now().toEpochMilli()
-    )
+    )*/
 
 
-    val openDialog = remember { mutableStateOf(false) }
+    /*val openDialog = remember { mutableStateOf(false) }*/
 
     Row (
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ){
-
+        Text(text = selectedDate.toString())
+        
         IconButton(onClick = {
-            openDialog.value = true
+            onIconClick()
         }) {
             Icon(
                 imageVector = Icons.Default.DateRange,
@@ -57,12 +69,21 @@ fun DateSelector() {
     }
 
 
-    if(openDialog.value) {
+    if(isDatePickerVisible) {
         DatePickerDialog(
-            onDismissRequest = { openDialog.value = false },
+            onDismissRequest = { onDismiss() },
             confirmButton = {
                 TextButton(onClick = {
-                    openDialog.value = false
+                    var selectedDate: LocalDate? = null
+
+                    datePickerState.selectedDateMillis?.let {
+                        selectedDate = convertMillisToDate(datePickerState.selectedDateMillis!!)
+                    }
+
+                    if(selectedDate != null) {
+                        onConfirm(selectedDate!!)
+                    }
+
                 }) {
                     Text(text = "OK")
                 }
@@ -70,7 +91,7 @@ fun DateSelector() {
             dismissButton = {
                 TextButton(
                     onClick = {
-                        openDialog.value = false
+                        onDismiss()
                     }
                 ) {
                     Text("Cancel")
@@ -80,6 +101,8 @@ fun DateSelector() {
             DatePicker(state = datePickerState)
         }
     }
+}
 
-
+private fun convertMillisToDate(millis: Long): LocalDate {
+    return LocalDateTime.ofEpochSecond(millis,0, ZoneOffset.UTC).toLocalDate()
 }

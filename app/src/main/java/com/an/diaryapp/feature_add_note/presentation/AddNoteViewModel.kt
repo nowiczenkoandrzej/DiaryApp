@@ -33,8 +33,6 @@ class AddNoteViewModel @Inject constructor(
     private val _error = MutableStateFlow<String?>(null)
     val error = _error.asStateFlow()
 
-
-
     init {
         viewModelScope.launch {
 
@@ -50,9 +48,6 @@ class AddNoteViewModel @Inject constructor(
             }
         }
     }
-
-
-
 
     fun selectCategory(category: Category) {
 
@@ -133,5 +128,17 @@ class AddNoteViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun setTimestamp(date: LocalDate) {
+        _screenState.value = screenState.value.copy(
+            timestamp = date
+        )
+    }
+
+    fun showOrHideDatePickerDialog() {
+        _screenState.value = screenState.value.copy(
+            isDatePickerVisible = !screenState.value.isDatePickerVisible
+        )
     }
 }
