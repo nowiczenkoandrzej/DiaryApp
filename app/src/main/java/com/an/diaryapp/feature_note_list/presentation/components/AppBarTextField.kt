@@ -48,14 +48,14 @@ fun AppBarTextField(
     val textStyle = LocalTextStyle.current
     // make sure there is no background color in the decoration box
     val colors = TextFieldDefaults.colors(
-        focusedContainerColor = MaterialTheme.colorScheme.surface,
-        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-        disabledContainerColor = MaterialTheme.colorScheme.primary,
+        focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+        unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+        disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
     )
 
     // If color is not provided via the text style, use content color as a default
     val textColor = textStyle.color.takeOrElse {
-        MaterialTheme.colorScheme.onSurface
+        MaterialTheme.colorScheme.onPrimary
     }
     val mergedTextStyle = textStyle.merge(TextStyle(color = textColor, lineHeight = 32.sp, fontSize = 20.sp))
 
@@ -108,10 +108,4 @@ fun AppBarTextField(
             }
         )
     }
-}
-
-@Preview
-@Composable
-fun preview() {
-    AppBarTextField(value = "dupa", onValueChange = {}, hint = "dip")
 }

@@ -32,6 +32,7 @@ import java.lang.Long
 
 @Composable
 fun CategorySelector(
+    modifier: Modifier = Modifier,
     categories: List<Category>,
     selectedCategories: List<Category>,
     onCategorySelect: (Category) -> Unit,
@@ -43,9 +44,7 @@ fun CategorySelector(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(4.dp)
+        modifier = modifier
     ) {
 
         Row(
