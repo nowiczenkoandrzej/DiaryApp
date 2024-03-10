@@ -58,7 +58,7 @@ LEFT JOIN
 LEFT JOIN
     categoryEntity ON notes_categories.category_id = categoryEntity.id
 WHERE noteEntity.description LIKE ('%' || :content || '%')
-ORDER BY noteEntity.timestamp ASC;
+ORDER BY noteEntity.timestamp DESC;
 
 
 getAllNotes:

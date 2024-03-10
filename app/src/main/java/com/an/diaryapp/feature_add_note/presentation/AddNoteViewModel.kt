@@ -123,7 +123,7 @@ class AddNoteViewModel @Inject constructor(
                         )
                     }
                     is Resource.Error -> {
-
+                        Log.d("TAG", "getWeatherInfo: ${result.error}")
                     }
                 }
             }

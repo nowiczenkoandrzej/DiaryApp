@@ -2,6 +2,7 @@ package com.an.diaryapp.feature_add_note.presentation
 
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,20 +14,26 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.an.diaryapp.core.domain.model.Screen
+import com.an.diaryapp.feature_add_note.domain.model.NoteHintTexts
 import com.an.diaryapp.feature_add_note.presentation.components.CategorySelector
 import com.an.diaryapp.feature_add_note.presentation.components.WeatherInfoPanel
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
@@ -57,6 +64,10 @@ fun AddNoteScreen(
 
     val calendarState = rememberSheetState()
 
+    val hintText = rememberSaveable {
+        NoteHintTexts.random()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -73,6 +84,10 @@ fun AddNoteScreen(
             onCategorySelect = { viewModel.selectCategory(it) },
             onCategoryUnselect = { viewModel.unselectCategory(it) }
         )
+        HorizontalDivider(
+            color = MaterialTheme.colorScheme.primary,
+            thickness = 1.dp
+        )
 
         WeatherInfoPanel(
             modifier = Modifier.fillMaxWidth(),
@@ -85,7 +100,8 @@ fun AddNoteScreen(
 
         Row (
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ){
             Text(text = state.timestamp.toString())
 
@@ -100,6 +116,12 @@ fun AddNoteScreen(
 
             }
         }
+
+        HorizontalDivider(
+            color = MaterialTheme.colorScheme.primary,
+            thickness = 1.dp
+        )
+
         CalendarDialog(
             state = calendarState,
             config = CalendarConfig(
@@ -111,16 +133,30 @@ fun AddNoteScreen(
             }
         )
 
-
-        BasicTextField(
-            value = state.description,
-            onValueChange = viewModel::setDescription,
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1F),
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences
-            ),
+        ) {
+            BasicTextField(
+                value = state.description,
+                onValueChange = viewModel::setDescription,
+                modifier = Modifier
+                    .fillMaxSize(),
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences
+                ),
+            )
+            if (state.description.isEmpty()) {
+                Text(text = hintText)
+            }
+        }
+
+
+
+        HorizontalDivider(
+            color = MaterialTheme.colorScheme.primary,
+            thickness = 1.dp
         )
 
         Button(

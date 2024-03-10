@@ -1,5 +1,6 @@
 package com.an.diaryapp.core.presentation
 
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -16,6 +17,7 @@ import com.an.diaryapp.feature_note_details.presentation.DetailsViewModel
 import com.an.diaryapp.feature_note_list.presentation.NotesListScreen
 import com.an.diaryapp.feature_note_list.presentation.NotesListViewModel
 
+@RequiresApi(34)
 @Composable
 fun Navigation(
     navController: NavHostController

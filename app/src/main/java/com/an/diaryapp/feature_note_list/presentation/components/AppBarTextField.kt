@@ -42,15 +42,15 @@ fun AppBarTextField(
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    //: FocusRequester
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val textStyle = LocalTextStyle.current
     // make sure there is no background color in the decoration box
     val colors = TextFieldDefaults.colors(
-        focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-        unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-        disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
+        focusedContainerColor = MaterialTheme.colorScheme.primary,
+        unfocusedContainerColor = MaterialTheme.colorScheme.primary,
+        disabledContainerColor = MaterialTheme.colorScheme.primary,
+
     )
 
     // If color is not provided via the text style, use content color as a default
@@ -99,7 +99,8 @@ fun AppBarTextField(
                     isError = false,
                     placeholder = { Text(
                         text = hint,
-                        modifier.padding(start = 4.dp)
+                        modifier.padding(start = 4.dp),
+                        color = MaterialTheme.colorScheme.onPrimary
                     ) },
                     colors = colors,
                     contentPadding = PaddingValues(bottom = 4.dp),

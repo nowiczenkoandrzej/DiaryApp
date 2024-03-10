@@ -55,7 +55,7 @@ fun NoteListItem(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            containerColor = MaterialTheme.colorScheme.background,
         ),
         shape = MaterialTheme.shapes.large
     ) {
@@ -95,7 +95,7 @@ fun NoteListItem(
                         modifier = Modifier
                             .clip(RoundedCornerShape(16.dp))
                             .width(6.dp)
-                            .background(color = Color.LightGray)
+                            .background(color = MaterialTheme.colorScheme.primary)
                             .weight(1F)
 
                     )

@@ -126,11 +126,11 @@ fun NotesListScreen(
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    scrolledContainerColor = MaterialTheme.colorScheme.primary,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 title = {
                     AppBarTextField(
@@ -168,8 +168,60 @@ fun NotesListScreen(
                 .padding(padding)
         ) {
 
-            val grouped = state.notes.groupBy { it.timestamp.month }
+           // val grouped = state.notes.groupBy { it.timestamp.month }
+
+
+            val groupedByYear = state.notes.groupBy { it.timestamp.year }
+
+
             LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1F),
+                state = listState
+            ) {
+
+                groupedByYear.forEach { year, notes ->
+                    val groupByMonth = notes.groupBy { it.timestamp.month }
+
+                    groupByMonth.forEach { month, notes ->
+                        stickyHeader {
+                            ListCategory(
+                                title = "${month.toString()} ${notes.first().timestamp.year}",
+                                modifier = Modifier
+                                    .background(
+                                        MaterialTheme.colorScheme.primaryContainer
+                                    )
+                                    .fillMaxWidth()
+                                    .height(48.dp),
+                            )
+                        }
+                        items(notes) { note ->
+                            NoteListItem(
+                                noteItem = note,
+                                onClick =  {
+                                    navController.navigate(
+                                        Screen.NoteDetails.passId(note.id!!)
+                                    )
+                                },
+                                onLongClick = {
+                                    showDeleteNoteDialog = true
+                                    deletedNoteId = note.id!!
+                                }
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
+
+                    }
+
+
+                }
+
+
+            }
+
+
+            /*LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1F),
@@ -206,7 +258,7 @@ fun NotesListScreen(
 
                 }
 
-            }
+            }*/
         }
     }
 }

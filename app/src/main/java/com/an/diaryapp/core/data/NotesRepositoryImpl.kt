@@ -38,8 +38,6 @@ class NotesRepositoryImpl @Inject constructor(
                 .groupBy { it.note_id }
                 .map { (_, group) ->
 
-
-
                     val  firstRow = group.first()
                     val isWeatherInfoAttached = firstRow.weather_id != null
                     val isCategoryListEmpty = firstRow.category_id == null
@@ -72,7 +70,7 @@ class NotesRepositoryImpl @Inject constructor(
                     )
                 }
             Resource.Success(
-                data = notes.reversed()
+                data = notes
             )
 
         } catch (e: Exception) {
