@@ -60,12 +60,7 @@ LEFT JOIN
 WHERE noteEntity.description LIKE ('%' || :content || '%')
 ORDER BY noteEntity.timestamp DESC;
 
-
-getAllNotes:
-SELECT *
-FROM noteEntity;
-
-getNotes:
+getNotesByDates:
 SELECT
     noteEntity.id AS note_id,
     noteEntity.description,
@@ -84,8 +79,9 @@ LEFT JOIN
 LEFT JOIN
     notes_categories ON noteEntity.id = notes_categories.note_id
 LEFT JOIN
-    categoryEntity ON notes_categories.category_id = categoryEntity.id;
-
+    categoryEntity ON notes_categories.category_id = categoryEntity.id
+WHERE noteEntity.timestamp BETWEEN :from AND :to
+ORDER BY noteEntity.timestamp DESC;
 
 insertNote:
 INSERT OR REPLACE

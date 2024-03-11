@@ -51,6 +51,17 @@ class NotesListViewModel @Inject constructor(
                     isSearchBarActive = !screenState.value.isSearchBarActive
                 )
             }
+
+            is NoteListEvent.SelectFilterFromDate -> {
+                _screenState.value = screenState.value.copy(
+                    filtersFromDate = event.date
+                )
+            }
+            is NoteListEvent.SelectFilterToDate -> {
+                _screenState.value = screenState.value.copy(
+                    filtersToDate = event.date
+                )
+            }
         }
     }
 

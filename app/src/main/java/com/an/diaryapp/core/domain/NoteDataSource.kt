@@ -4,11 +4,10 @@ import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.core.domain.model.Resource
 import diaryapp.db.CategoryEntity
 import diaryapp.db.GetNoteById
-import diaryapp.db.GetNotes
 import diaryapp.db.GetNotesByContent
-import diaryapp.db.NoteEntity
-import kotlinx.coroutines.flow.Flow
+import diaryapp.db.GetNotesByDates
 import java.time.LocalDate
+
 
 interface NoteDataSource {
 
@@ -29,5 +28,10 @@ interface NoteDataSource {
     )
 
     suspend fun deleteNote(id: Long)
+
+    suspend fun getNoteFromDates(
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): List<GetNotesByDates>
 
 }

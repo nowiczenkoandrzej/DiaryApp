@@ -9,6 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import diaryapp.db.GetNotesByContent
+import diaryapp.db.GetNotesByDates
+import java.time.LocalDate
 
 
 class NoteDataSourceImpl @Inject constructor(
@@ -91,6 +93,17 @@ class NoteDataSourceImpl @Inject constructor(
 
     override suspend fun deleteNote(id: Long) {
         queries.deleteNote(id)
+    }
+
+    override suspend fun getNoteFromDates(
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): List<GetNotesByDates> {
+        return queries
+            .getNotesByDates(
+                from = startDate.toString(),
+                to = endDate.toString())
+            .executeAsList()
     }
 }
 

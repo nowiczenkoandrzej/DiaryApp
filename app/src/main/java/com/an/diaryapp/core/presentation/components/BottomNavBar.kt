@@ -37,8 +37,6 @@ fun BottomNavBar(
 
             val isSelected = currentDestination?.route.equals(item.route)
 
-
-
             NavigationBarItem(
                 selected = isSelected,
                 label = {
@@ -54,7 +52,6 @@ fun BottomNavBar(
                     )
                 },
                 onClick = {
-                    //selectedItem = index
                     if(currentDestination?.route.equals(Screen.NoteDetails.route)
                         && item.route.equals(Screen.DiaryNotesList.route)
                     ) {
@@ -68,10 +65,6 @@ fun BottomNavBar(
                             restoreState = true
                         }
                     }
-
-
-
-
                 },
             )
         }
