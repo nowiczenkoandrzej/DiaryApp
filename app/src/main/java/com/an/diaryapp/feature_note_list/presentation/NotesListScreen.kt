@@ -1,6 +1,7 @@
 package com.an.diaryapp.feature_note_list.presentation
 
 import android.util.Log
+import android.util.Range
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
@@ -63,8 +65,11 @@ import com.an.diaryapp.feature_note_list.presentation.components.DeleteNoteDialo
 import com.an.diaryapp.feature_note_list.presentation.components.NoteListItem
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
+import com.maxkeppeler.sheets.calendar.CalendarView
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
+import com.maxkeppeler.sheets.calendar.models.CalendarStyle
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -99,6 +104,12 @@ fun NotesListScreen(
 
     val calendarStateFromDate = rememberSheetState()
     val calendarStateToDate = rememberSheetState()
+    val mainCalendarState = rememberSheetState()
+
+    val selectedDateRange = remember {
+        val value = Range(LocalDate.now().minusDays(7), LocalDate.now())
+        mutableStateOf(value)
+    }
 
     val lifecycleState by LocalLifecycleOwner
         .current
@@ -146,6 +157,7 @@ fun NotesListScreen(
             icon = Icons.Default.Delete
         )
     }
+
 
 
     CalendarDialog(
@@ -263,6 +275,8 @@ fun NotesListScreen(
             sheetState = sheetState,
             onDismissRequest = { isSheetOpen = false }
         ) {
+
+            
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -276,51 +290,61 @@ fun NotesListScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                Row (
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
-                ){
 
-                    Text(text = "From ${state.filtersFromDate?.toString() ?: ""}")
+                ) {
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.primary,
+                        thickness = 1.dp,
+                        modifier = Modifier.weight(1f)
+                    )
 
+                    Text(
+                        text = "Date range",
+                        modifier = Modifier
+                            .padding(start = 8.dp, end = 8.dp)
+                    )
 
-                    IconButton(onClick = {
-                        calendarStateFromDate.show()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.DateRange,
-                            contentDescription = null
-                        )
-
-                    }
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.primary,
+                        thickness = 1.dp,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
 
-                Row (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
+                Spacer(modifier = Modifier.height(16.dp))
 
-                    Text(text = "To ${state.filtersToDate?.toString() ?: ""}")
-
-
-                    IconButton(onClick = {
-                        calendarStateToDate.show()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.DateRange,
-                            contentDescription = null
-                        )
-
+                CalendarView(
+                    sheetState = mainCalendarState,
+                    config = CalendarConfig(
+                        style = CalendarStyle.MONTH
+                    ),
+                    selection = CalendarSelection.Period(
+                        selectedRange = selectedDateRange.value
+                    ) { startDate, endDate ->
+                        selectedDateRange.value = Range(startDate, endDate)
                     }
-                }
+                )
+
+                CalendarView(
+                    sheetState = mainCalendarState,
+                    config = CalendarConfig(
+                        style = CalendarStyle.MONTH
+                    ),
+                    selection = CalendarSelection.Period(
+                        selectedRange = selectedDateRange.value
+                    ) { startDate, endDate ->
+                        selectedDateRange.value = Range(startDate, endDate)
+                    }
+                )
+
 
                 Spacer(modifier = Modifier.height(40.dp))
 
