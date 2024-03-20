@@ -72,6 +72,11 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.0-rc01")
 
 
+
+    //Compose Constraints
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+
+
     // Compose runtime
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0-rc01")
 

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.an.diaryapp.feature_note_details.presentation.components.SunnyBackground
 
 @Composable
 fun DetailsScreen(
@@ -21,7 +22,7 @@ fun DetailsScreen(
         .collectAsState()
         .value
 
-    note?.let {
+    /*note?.let {
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -30,8 +31,9 @@ fun DetailsScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = note.description)
         }
-    }
-    
+    }*/
+
+    SunnyBackground()
 
 
 }
