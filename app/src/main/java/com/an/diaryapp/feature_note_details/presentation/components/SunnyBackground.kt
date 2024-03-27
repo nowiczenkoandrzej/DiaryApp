@@ -9,7 +9,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,14 +21,15 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.an.diaryapp.R
+import com.an.diaryapp.ui.theme.BackgroundSky
+import com.an.diaryapp.ui.theme.BackgroundSun
+import com.an.diaryapp.ui.theme.BackgroundSunshine
 
 @Composable
 fun SunnyBackground() {
@@ -82,12 +82,22 @@ fun SunnyBackground() {
                     lineTo(screenWidth.toFloat(), 100F)
                 }*/
                 drawRect(
-                    color = Color.Blue
+                    color = BackgroundSky
                 )
+
+                drawCircle(
+                    radius = screenWidth.toFloat() * 2,
+                    color = BackgroundSunshine,
+                    center = Offset(
+                        x = screenWidth.toFloat() * 3,
+                        y = 0f
+                    )
+                )
+
                 //drawPath(path = path, color = Color.White)
                 drawCircle(
                     radius = screenWidth.toFloat() * 3 / 2,
-                    color = Color.Yellow,
+                    color = BackgroundSun,
                     center = Offset(
                         x = screenWidth.toFloat() * 3,
                         y = 0f

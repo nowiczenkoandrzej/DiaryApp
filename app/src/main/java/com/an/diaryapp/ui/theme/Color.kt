@@ -81,3 +81,7 @@ val OnSurface = Color(0xFF1a1c19)
 val Outline = Color(0xFF727970)
 val SurfaceVariant = Color(0xFFdde5d9)
 val OnSurfaceVariant = Color(0xFF424940)
+
+val BackgroundSky = Color(0xFF00a4d0)
+val BackgroundSun = Color(0xFFffe683)
+val BackgroundSunshine = Color(0xFFfcd68b)
