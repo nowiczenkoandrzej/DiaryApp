@@ -16,6 +16,7 @@ import com.an.diaryapp.feature_note_details.presentation.DetailsScreen
 import com.an.diaryapp.feature_note_details.presentation.DetailsViewModel
 import com.an.diaryapp.feature_note_list.presentation.NotesListScreen
 import com.an.diaryapp.feature_note_list.presentation.NotesListViewModel
+import com.an.diaryapp.feature_settings.presentation.SettingsScreen
 
 @RequiresApi(34)
 @Composable
