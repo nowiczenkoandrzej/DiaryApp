@@ -5,9 +5,21 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 
-class AlarmReceiver: BroadcastReceiver() {
+class AlarmReceiver(): BroadcastReceiver() {
+
     override fun onReceive(context: Context?, intent: Intent?) {
         val message = intent?.getStringExtra("MESSAGE") ?: return
         Log.d("TAG", "onReceive: $message")
+
+
+        if(context == null) return
+
+        val service = NotificationService(context)
+        service.showNotification()
+
+
+
+
+
     }
 }
