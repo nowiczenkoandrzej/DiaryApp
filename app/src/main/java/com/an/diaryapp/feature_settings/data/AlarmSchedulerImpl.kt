@@ -4,7 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.an.diaryapp.feature_settings.domain.AlarmItem
+import com.an.diaryapp.feature_settings.domain.model.AlarmItem
 import com.an.diaryapp.feature_settings.domain.AlarmScheduler
 import java.time.ZoneId
 
@@ -18,9 +18,7 @@ class AlarmSchedulerImpl(
 
     override fun schedule(item: AlarmItem) {
 
-        val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("MESSAGE", item.message)
-        }
+        val intent = Intent(context, AlarmReceiver::class.java)
 
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,

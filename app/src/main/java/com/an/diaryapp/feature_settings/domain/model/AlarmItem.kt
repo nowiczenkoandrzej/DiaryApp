@@ -1,4 +1,4 @@
-package com.an.diaryapp.feature_settings.domain
+package com.an.diaryapp.feature_settings.domain.model
 
 import java.time.LocalDateTime
 

@@ -4,6 +4,7 @@ plugins {
     id("app.cash.sqldelight") version "2.0.1"
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -76,7 +77,6 @@ dependencies {
     //Compose Constraints
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
-
     // Compose runtime
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0-rc01")
 
@@ -101,11 +101,16 @@ dependencies {
     // Location Services
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
-    // Caledar
+    // Maxkeppeler Caledar and Clock
     implementation("com.maxkeppeler.sheets-compose-dialogs:core:1.0.2")
     implementation("com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2")
+    implementation("com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
 
+    // DataStore
+    implementation("androidx.datastore:datastore:1.0.0")
 
+    // Serialization json
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
 }
 

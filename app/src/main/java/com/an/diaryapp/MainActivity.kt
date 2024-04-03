@@ -1,6 +1,7 @@
 package com.an.diaryapp
 
 import android.Manifest
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,13 +17,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.datastore.dataStore
 import androidx.navigation.compose.rememberNavController
 import com.an.diaryapp.core.presentation.Navigation
 import com.an.diaryapp.core.presentation.components.BottomNavBar
+import com.an.diaryapp.di.DATA_STORE_FILE_NAME
+import com.an.diaryapp.feature_settings.data.AppSettingsSerializer
+import com.an.diaryapp.feature_settings.domain.model.AppSettings
 import com.an.diaryapp.ui.theme.DiaryAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+
+
+val Context.dataStore by dataStore(DATA_STORE_FILE_NAME, AppSettingsSerializer)
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,6 +39,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
 
+    val appSettings = dataStore.data.collectAsState(initial = AppSettings()).value
 
     @RequiresApi(34)
     @OptIn(ExperimentalMaterial3Api::class)

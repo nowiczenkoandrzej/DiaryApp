@@ -27,9 +27,10 @@ class NotificationService(
 
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.baseline_menu_book_24)
-            .setContentTitle("Create New Book")
+            .setContentTitle("Create New Note")
             .setContentText("")
             .setContentIntent(intent)
+            .setAutoCancel(true)
             .build()
 
         notificationManager.notify(

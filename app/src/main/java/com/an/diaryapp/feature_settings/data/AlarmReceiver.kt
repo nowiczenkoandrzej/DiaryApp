@@ -9,7 +9,6 @@ class AlarmReceiver(): BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val message = intent?.getStringExtra("MESSAGE") ?: return
-        Log.d("TAG", "onReceive: $message")
 
 
         if(context == null) return

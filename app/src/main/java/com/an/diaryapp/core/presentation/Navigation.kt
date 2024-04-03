@@ -17,6 +17,7 @@ import com.an.diaryapp.feature_note_details.presentation.DetailsViewModel
 import com.an.diaryapp.feature_note_list.presentation.NotesListScreen
 import com.an.diaryapp.feature_note_list.presentation.NotesListViewModel
 import com.an.diaryapp.feature_settings.presentation.SettingsScreen
+import com.an.diaryapp.feature_settings.presentation.SettingsViewModel
 
 @RequiresApi(34)
 @Composable
@@ -49,7 +50,13 @@ fun Navigation(
         }
 
         composable(route = Screen.Settings.route) {
-            SettingsScreen(navController = navController)
+
+            val viewModel = hiltViewModel<SettingsViewModel>()
+
+            SettingsScreen(
+                navController = navController,
+                viewModel = viewModel
+            )
 
         }
 
