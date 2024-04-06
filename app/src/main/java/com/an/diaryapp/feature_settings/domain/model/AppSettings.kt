@@ -4,6 +4,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Serializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
@@ -21,10 +23,10 @@ data class AppSettings(
 object TimeSerializer: KSerializer<LocalTime> {
 
 
-    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE
+    private val formatter = DateTimeFormatter.ISO_LOCAL_TIME
 
     override val descriptor: SerialDescriptor
-        get() = TODO("Not yet implemented")
+        get() = PrimitiveSerialDescriptor("LocalTime", PrimitiveKind.STRING)
     override fun deserialize(decoder: Decoder): LocalTime {
         return LocalTime.parse(decoder.decodeString(), formatter)
     }

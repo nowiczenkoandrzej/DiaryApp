@@ -31,7 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 
-val Context.dataStore by dataStore(DATA_STORE_FILE_NAME, AppSettingsSerializer)
+//val Context.dataStore by dataStore(DATA_STORE_FILE_NAME, AppSettingsSerializer)
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -39,7 +39,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
 
-    val appSettings = dataStore.data.collectAsState(initial = AppSettings()).value
 
     @RequiresApi(34)
     @OptIn(ExperimentalMaterial3Api::class)
@@ -59,6 +58,9 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             DiaryAppTheme {
+
+                //val appSettings = dataStore.data.collectAsState(initial = AppSettings()).value
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

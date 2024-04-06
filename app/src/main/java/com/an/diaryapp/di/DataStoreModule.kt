@@ -18,7 +18,7 @@ import javax.inject.Singleton
 
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
- const val DATA_STORE_FILE_NAME = "user_pref.pb"
+const val DATA_STORE_FILE_NAME = "user_pref.pb"
 @InstallIn(SingletonComponent::class)
 @Module
 object DataStoreModule {
@@ -37,5 +37,4 @@ object DataStoreModule {
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
         )
     }
-
 }

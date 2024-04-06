@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.an.diaryapp.di.DATA_STORE_FILE_NAME
 import com.an.diaryapp.feature_settings.data.AppSettingsSerializer
+import com.an.diaryapp.feature_settings.domain.SettingsRepository
 import com.an.diaryapp.feature_settings.domain.model.AppSettings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,14 +23,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val dataStore: DataStore<AppSettings>
+    private val repository: SettingsRepository
 ): ViewModel() {
-
 
 
     init {
         viewModelScope.launch {
-           // _savedDate = dataStore.
+            repository.getAppSettings().collect{ appSettings ->
+                _savedDate.value = appSettings.notificationHour
+            }
         }
     }
 
@@ -45,6 +47,16 @@ class SettingsViewModel @Inject constructor(
 
     fun setTime(time: LocalTime) {
         _date.value = time
+    }
+
+    fun saveTime() {
+        viewModelScope.launch {
+            repository.putAppSettings(
+                settings = AppSettings(
+                    notificationHour = date.value
+                )
+            )
+        }
     }
 
 

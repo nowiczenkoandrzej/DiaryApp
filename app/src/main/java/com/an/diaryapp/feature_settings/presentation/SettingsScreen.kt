@@ -51,6 +51,11 @@ fun SettingsScreen(
         .collectAsState()
         .value
 
+    val savedDate = viewModel
+        .savedDate
+        .collectAsState()
+        .value
+
     var seconds by remember {
         mutableStateOf("")
     }
@@ -83,7 +88,12 @@ fun SettingsScreen(
             }
         )
         
-        Text(text = "${date.hour}:${date.minute}")
+        Text(text = "Selected: ${date.hour}:${date.minute}")
+        savedDate?.let {
+
+            Text(text = "Saved: ${savedDate.hour}:${savedDate.minute}")
+
+        }
 
         Row (
             modifier = Modifier.fillMaxWidth()
@@ -109,7 +119,13 @@ fun SettingsScreen(
             Button(onClick = {
                 clockState.show()
             }) {
-                Text(text = "Cancel")
+                Text(text = "select date")
+            }
+
+            Button(onClick = {
+                viewModel.saveTime()
+            }) {
+                Text(text = "save")
             }
         }
     }
