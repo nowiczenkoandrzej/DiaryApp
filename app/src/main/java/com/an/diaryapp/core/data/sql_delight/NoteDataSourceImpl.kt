@@ -1,4 +1,4 @@
-package com.an.diaryapp.core.data.local
+package com.an.diaryapp.core.data.sql_delight
 
 import com.an.diaryapp.NotesDatabase
 import com.an.diaryapp.core.domain.NoteDataSource

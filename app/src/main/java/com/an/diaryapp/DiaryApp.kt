@@ -4,8 +4,7 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
-import com.an.diaryapp.feature_settings.data.NotificationService
+import com.an.diaryapp.feature_notification.NotificationService
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

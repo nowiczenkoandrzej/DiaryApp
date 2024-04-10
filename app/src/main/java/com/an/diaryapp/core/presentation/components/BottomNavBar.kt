@@ -1,6 +1,5 @@
 package com.an.diaryapp.core.presentation.components
 
-import android.util.Log
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -13,7 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.an.diaryapp.core.domain.BottomNavigationItem
+import com.an.diaryapp.core.domain.model.BottomNavigationItem
 import com.an.diaryapp.core.domain.model.Screen
 
 

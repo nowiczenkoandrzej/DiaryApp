@@ -3,7 +3,7 @@ package com.an.diaryapp.di
 import android.app.Application
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.an.diaryapp.core.domain.NoteDataSource
-import com.an.diaryapp.core.data.local.NoteDataSourceImpl
+import com.an.diaryapp.core.data.sql_delight.NoteDataSourceImpl
 import com.an.diaryapp.NotesDatabase
 import dagger.Binds
 import dagger.Module

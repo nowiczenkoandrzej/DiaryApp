@@ -1,8 +1,10 @@
 package com.an.diaryapp.di
 
 import com.an.diaryapp.core.data.NotesRepositoryImpl
+import com.an.diaryapp.core.data.data_store.UserPreferencesRepositoryImpl
 
-import com.an.diaryapp.core.domain.NotesRepository
+import com.an.diaryapp.core.domain.repository.NotesRepository
+import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
 import com.an.diaryapp.feature_settings.data.SettingRepositoryImpl
 import com.an.diaryapp.feature_settings.domain.SettingsRepository
 import dagger.Binds
@@ -28,5 +30,11 @@ abstract class RepositoryModule {
     abstract fun bindSettingsRepository(
         repository: SettingRepositoryImpl
     ): SettingsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPreferencesRepository(
+        repository: UserPreferencesRepositoryImpl
+    ): UserPreferencesRepository
 
 }

@@ -108,6 +108,7 @@ dependencies {
 
     // DataStore
     implementation("androidx.datastore:datastore:1.0.0")
+    implementation("androidx.datastore:datastore-preferences-android:1.1.0-rc01")
 
     // Serialization json
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")

@@ -1,18 +1,18 @@
-package com.an.diaryapp.feature_settings.data
+package com.an.diaryapp.feature_notification
 
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.an.diaryapp.feature_settings.domain.model.AlarmItem
-import com.an.diaryapp.feature_settings.domain.AlarmScheduler
 import java.time.ZoneId
+import javax.inject.Inject
 
-class AlarmSchedulerImpl(
-    private val context: Context
+class AlarmSchedulerImpl @Inject constructor(
+    private val context: Context,
+    private val alarmManager: AlarmManager
 ): AlarmScheduler {
 
-    private val alarmManager = context.getSystemService(AlarmManager::class.java)
+    //private val alarmManager = context.getSystemService(AlarmManager::class.java)
 
 
 
@@ -30,6 +30,11 @@ class AlarmSchedulerImpl(
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         )
+
+
+        /*alarmManager.setRepeating(
+            AlarmManager.
+        )*/
     }
 
     override fun cancel(item: AlarmItem) {

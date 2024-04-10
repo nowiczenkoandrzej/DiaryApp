@@ -1,19 +1,14 @@
 package com.an.diaryapp.feature_settings.presentation
 
-import android.content.Context
-import androidx.compose.runtime.collectAsState
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.an.diaryapp.di.DATA_STORE_FILE_NAME
-import com.an.diaryapp.feature_settings.data.AppSettingsSerializer
+import com.an.diaryapp.feature_notification.AlarmItem
+import com.an.diaryapp.feature_notification.AlarmScheduler
 import com.an.diaryapp.feature_settings.domain.SettingsRepository
 import com.an.diaryapp.feature_settings.domain.model.AppSettings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 import javax.inject.Inject
@@ -23,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val repository: SettingsRepository
+    private val repository: SettingsRepository,
+    private val alarmScheduler: AlarmScheduler
 ): ViewModel() {
 
 
@@ -57,6 +53,14 @@ class SettingsViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    fun schedule(alarmItem: AlarmItem) {
+        alarmScheduler.schedule(alarmItem)
+    }
+
+    fun cancel(alarmItem: AlarmItem) {
+        alarmScheduler.cancel(alarmItem)
     }
 
 

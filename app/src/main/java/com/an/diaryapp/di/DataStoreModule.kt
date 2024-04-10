@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.an.diaryapp.feature_settings.data.AppSettingsSerializer
 import com.an.diaryapp.feature_settings.domain.model.AppSettings
 import dagger.Module
@@ -17,8 +20,8 @@ import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 
-private const val USER_PREFERENCES_NAME = "user_preferences"
 const val DATA_STORE_FILE_NAME = "user_pref.pb"
+private const val USER_PREFERENCES = "user_preferences"
 @InstallIn(SingletonComponent::class)
 @Module
 object DataStoreModule {
@@ -35,6 +38,16 @@ object DataStoreModule {
             },
             corruptionHandler = null,
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun providePreferencesDataStore(
+        @ApplicationContext app: Context
+    ): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            produceFile = { app.preferencesDataStoreFile(USER_PREFERENCES)}
         )
     }
 }

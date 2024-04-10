@@ -1,4 +1,4 @@
-package com.an.diaryapp.core.domain
+package com.an.diaryapp.core.domain.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -8,7 +8,6 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.an.diaryapp.core.domain.model.Screen
 
 data class BottomNavigationItem(
     val title: String,

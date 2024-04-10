@@ -1,4 +1,4 @@
-package com.an.diaryapp.core.domain
+package com.an.diaryapp.core.domain.repository
 
 import com.an.diaryapp.core.domain.model.Category
 import com.an.diaryapp.core.domain.model.NoteItem

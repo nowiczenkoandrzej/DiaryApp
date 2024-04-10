@@ -1,6 +1,5 @@
 package com.an.diaryapp.feature_settings.presentation
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,12 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.datastore.dataStore
 import androidx.navigation.NavController
-import com.an.diaryapp.di.DATA_STORE_FILE_NAME
-import com.an.diaryapp.feature_settings.data.AlarmSchedulerImpl
-import com.an.diaryapp.feature_settings.data.AppSettingsSerializer
-import com.an.diaryapp.feature_settings.domain.model.AlarmItem
+import com.an.diaryapp.feature_notification.AlarmItem
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.clock.ClockDialog
 import com.maxkeppeler.sheets.clock.models.ClockSelection
@@ -38,9 +33,7 @@ fun SettingsScreen(
 ) {
 
     val context = LocalContext.current
-    val scheduler = AlarmSchedulerImpl(context)
-
-
+    //val scheduler = AlarmSchedulerImpl(context)
 
 
     var alarmItem: AlarmItem? = null
@@ -77,7 +70,6 @@ fun SettingsScreen(
         }
     )
 
-
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -104,7 +96,7 @@ fun SettingsScreen(
                         .plusSeconds(seconds.toLong()),
                     message = message
                 )
-                alarmItem?.let(scheduler::schedule)
+                alarmItem?.let(viewModel::schedule)
                 seconds = ""
                 message = ""
             }) {
@@ -112,7 +104,7 @@ fun SettingsScreen(
             }
 
             Button(onClick = {
-                alarmItem?.let(scheduler::cancel)
+                alarmItem?.let(viewModel::cancel)
             }) {
                 Text(text = "Cancel")
             }

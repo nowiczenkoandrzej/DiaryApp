@@ -1,9 +1,8 @@
 package com.an.diaryapp.feature_note_details.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.an.diaryapp.core.domain.NotesRepository
+import com.an.diaryapp.core.domain.repository.NotesRepository
 import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.core.domain.model.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel

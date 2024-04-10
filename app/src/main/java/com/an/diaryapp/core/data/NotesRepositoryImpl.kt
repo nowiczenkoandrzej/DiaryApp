@@ -1,9 +1,8 @@
 package com.an.diaryapp.core.data
 
-import android.util.Log
 import com.an.diaryapp.feature_add_note.data.remote.WeatherApi
 import com.an.diaryapp.core.domain.NoteDataSource
-import com.an.diaryapp.core.domain.NotesRepository
+import com.an.diaryapp.core.domain.repository.NotesRepository
 import com.an.diaryapp.core.domain.model.Category
 import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.core.domain.model.Resource
