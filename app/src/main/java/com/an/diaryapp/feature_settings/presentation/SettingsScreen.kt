@@ -104,7 +104,7 @@ fun SettingsScreen(
             }
 
             Button(onClick = {
-                alarmItem?.let(viewModel::cancel)
+                viewModel.cancel()
             }) {
                 Text(text = "Cancel")
             }

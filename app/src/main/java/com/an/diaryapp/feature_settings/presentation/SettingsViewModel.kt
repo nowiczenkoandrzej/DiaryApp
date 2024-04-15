@@ -59,8 +59,8 @@ class SettingsViewModel @Inject constructor(
         alarmScheduler.schedule(alarmItem)
     }
 
-    fun cancel(alarmItem: AlarmItem) {
-        alarmScheduler.cancel(alarmItem)
+    fun cancel() {
+        alarmScheduler.cancel()
     }
 
 
