@@ -5,7 +5,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -15,7 +14,7 @@ class UserPreferencesRepositoryImpl @Inject constructor(
 ): UserPreferencesRepository{
 
     private val hasNoteBeenAddedKey = booleanPreferencesKey("has_note_been_added")
-    private val hashCodeKey = intPreferencesKey("hash_code_key")
+    private val alarmKey = intPreferencesKey("alarm_key")
     override suspend fun setIsNoteAdded(isAdded: Boolean) {
         dataStore.edit { settings ->
             settings[hasNoteBeenAddedKey] = isAdded
@@ -35,14 +34,14 @@ class UserPreferencesRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun setHashCode(code: Int) {
+    override suspend fun setAlarmId(id: Int) {
         dataStore.edit { settings ->
-            settings[hashCodeKey] = code
+            settings[alarmKey] = id
         }
     }
 
-    override suspend fun getHashCode(): Int {
+    override suspend fun getAlarmId(): Int {
         val preferences = dataStore.data.first()
-        return preferences[hashCodeKey] as Int
+        return preferences[alarmKey] as Int
     }
 }

@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -22,10 +23,11 @@ class NotificationService @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) {
 
-    //private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     fun showNotification() {
         CoroutineScope(Dispatchers.IO).launch {
             val hasNoteBeenAddedToday = userPreferencesRepository.getIsNoteAdded() ?: false
+
+            Log.d("TAG", "showNotification: alarm received, has note been added: $hasNoteBeenAddedToday")
 
             if(!hasNoteBeenAddedToday) {
                 val activityIntent = Intent(context, MainActivity::class.java)
@@ -49,6 +51,11 @@ class NotificationService @Inject constructor(
                     1,
                     notification
                 )
+
+                Log.d("TAG", "showNotification: notification shown")
+            } else {
+                userPreferencesRepository.setIsNoteAdded(false)
+                Log.d("TAG", "showNotification: notification didnt show up")
             }
         }
     }

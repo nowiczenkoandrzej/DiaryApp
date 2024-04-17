@@ -5,7 +5,7 @@ interface UserPreferencesRepository {
     suspend fun setIsNoteAdded(isAdded: Boolean)
     suspend fun getIsNoteAdded(): Boolean?
 
-    suspend fun setHashCode(code: Int)
+    suspend fun setAlarmId(id: Int)
 
-    suspend fun getHashCode(): Int
+    suspend fun getAlarmId(): Int
 }

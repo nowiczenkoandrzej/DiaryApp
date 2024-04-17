@@ -10,6 +10,7 @@ import com.an.diaryapp.feature_add_note.domain.model.AddNoteScreenState
 import com.an.diaryapp.core.domain.model.Category
 import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.core.domain.model.Resource
+import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddNoteViewModel @Inject constructor(
-    private val repository: NotesRepository,
+    private val notesRepository: NotesRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val locationTracker: LocationTracker,
     private val geocoder: Geocoder
 ): ViewModel() {
@@ -36,7 +38,7 @@ class AddNoteViewModel @Inject constructor(
     init {
         viewModelScope.launch {
 
-            when(val result = repository.getAllCategories()) {
+            when(val result = notesRepository.getAllCategories()) {
                 is Resource.Error -> {
                     _error.value = result.error
                     _categories.value = emptyList()
@@ -78,7 +80,7 @@ class AddNoteViewModel @Inject constructor(
 
             val state = screenState.value
 
-            repository.addNote(
+            notesRepository.addNote(
                 NoteItem(
                     description = state.description,
                     timestamp = state.timestamp,
@@ -87,6 +89,8 @@ class AddNoteViewModel @Inject constructor(
                     location = state.location
                 )
             )
+
+            userPreferencesRepository.setIsNoteAdded(true)
         }
     }
 
@@ -95,7 +99,7 @@ class AddNoteViewModel @Inject constructor(
 
             locationTracker.getCurrentLocation()?.let { location ->
 
-                val result = repository.getWeatherInfo(
+                val result = notesRepository.getWeatherInfo(
                     lat = location.latitude,
                     long = location.longitude
                 )

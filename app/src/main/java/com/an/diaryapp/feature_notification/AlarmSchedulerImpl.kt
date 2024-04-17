@@ -4,8 +4,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import androidx.annotation.RequiresApi
 import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,12 +27,14 @@ class AlarmSchedulerImpl @Inject constructor(
 
         val hashCode = item.hashCode()
 
-        
+
         CoroutineScope(Dispatchers.IO).launch {
 
             cancel()
 
-            userPreferencesRepository.setHashCode(hashCode)
+            userPreferencesRepository.setIsNoteAdded(false)
+
+            userPreferencesRepository.setAlarmId(hashCode)
 
             alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
@@ -59,7 +59,7 @@ class AlarmSchedulerImpl @Inject constructor(
 
         CoroutineScope(Dispatchers.IO).launch {
 
-            val hashCode = userPreferencesRepository.getHashCode()
+            val hashCode = userPreferencesRepository.getAlarmId()
 
             alarmManager.cancel(
                 PendingIntent.getBroadcast(

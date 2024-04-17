@@ -9,11 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AlarmReceiver(
-    /*private val notificationManager: NotificationManager,
-    private val userPreferencesRepository: UserPreferencesRepository,*/
-    //private val notificationService: NotificationService
-): BroadcastReceiver() {
+class AlarmReceiver: BroadcastReceiver() {
 
     @Inject lateinit var notificationService: NotificationService
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -22,12 +18,7 @@ class AlarmReceiver(
 
         notificationService.showNotification()
 
-        /*val service = NotificationService(
-            context,
-            notificationManager,
-            userPreferencesRepository
-        )
-        service.showNotification()*/
+
 
 
     }
