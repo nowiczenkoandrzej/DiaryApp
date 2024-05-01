@@ -17,10 +17,6 @@ class AlarmSchedulerImpl @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ): AlarmScheduler {
 
-    //private val alarmManager = context.getSystemService(AlarmManager::class.java)
-
-
-
     override fun schedule(item: AlarmItem) {
 
         val intent = Intent(context, AlarmReceiver::class.java)
@@ -39,7 +35,7 @@ class AlarmSchedulerImpl @Inject constructor(
             alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 item.time.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000,
-                60000L, //AlarmManager.INTERVAL_DAY,
+                AlarmManager.INTERVAL_DAY,
                 PendingIntent.getBroadcast(
                     context,
                     hashCode,
@@ -47,14 +43,10 @@ class AlarmSchedulerImpl @Inject constructor(
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
             )
-
         }
-
-
 
     }
 
-    //@RequiresApi(34)
     override fun cancel() {
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -70,13 +62,6 @@ class AlarmSchedulerImpl @Inject constructor(
                 )
             )
 
-
-
-
-
-
         }
-
-        //alarmManager.cancelAll()
     }
 }

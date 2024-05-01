@@ -22,6 +22,7 @@ import com.an.diaryapp.core.data.toWeatherIcon
 import com.an.diaryapp.core.presentation.components.WeatherDisplay
 import com.an.diaryapp.feature_note_details.presentation.components.CalendarPage
 import com.an.diaryapp.feature_note_details.presentation.components.SunnyBackground
+import com.an.diaryapp.feature_note_details.presentation.components.Thermometer
 
 @Composable
 fun DetailsScreen(
@@ -96,7 +97,11 @@ fun DetailsScreen(
                 }
 
 
-                CalendarPage(date = note.timestamp)
+                //CalendarPage(date = note.timestamp)
+                note.weatherInfo?.let {
+                    Thermometer(temperature = note.weatherInfo.temperature)
+                }
+
 
                 /*Text(
                     text = note.timestamp.toString(),

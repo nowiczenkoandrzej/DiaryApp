@@ -45,7 +45,6 @@ fun SunnyBackground() {
     val translationDurationMillis: Int = 2000
     val translationDistance: Dp = 100.dp
 
-    var rotation by remember { mutableStateOf(0f) }
 
     val infiniteTransition = rememberInfiniteTransition()
 
