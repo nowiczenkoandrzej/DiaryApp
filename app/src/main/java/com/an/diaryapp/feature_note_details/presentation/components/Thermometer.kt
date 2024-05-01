@@ -135,10 +135,7 @@ fun Thermometer(
                     ),
                     cornerRadius = CornerRadius(x = 8f, y = 8f)
                 )
-                /*translate(
-                    top = 100.dp.toPx()*translateBy.value
-                ) {
-                }*/
+
 
                 drawCircle(
                     color = temperatureType.color,

@@ -19,7 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.an.diaryapp.feature_note_details.presentation.backgrounds.CloudyBackground
+import com.an.diaryapp.feature_note_details.presentation.backgrounds.RainShowerBackground
 import com.an.diaryapp.feature_note_details.presentation.backgrounds.SunnyBackground
+import com.an.diaryapp.feature_note_details.presentation.backgrounds.VeryCloudyBackground
 import com.an.diaryapp.feature_note_details.presentation.components.Thermometer
 
 @Composable
@@ -32,6 +34,8 @@ fun DetailsScreen(
         .collectAsState()
         .value
 
+
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -39,12 +43,10 @@ fun DetailsScreen(
             when(note.weatherInfo.weatherType.toInt()) {
                 0 -> SunnyBackground()
                 1, 2, 3 -> CloudyBackground()
-                /*45 -> R.drawable.ic_very_cloudy
-                48 -> R.drawable.ic_very_cloudy
-                51-> R.drawable.ic_rainshower
-                53 -> R.drawable.ic_rainshower
-                55 -> R.drawable.ic_rainshower
-                56 -> R.drawable.ic_snowyrainy
+                45, 48 -> VeryCloudyBackground()
+                51, 53, 55, 80, 81, 82-> RainShowerBackground()
+
+                /*56 -> R.drawable.ic_snowyrainy
                 57 -> R.drawable.ic_snowyrainy
                 61 -> R.drawable.ic_rainy
                 63 -> R.drawable.ic_rainy
@@ -55,9 +57,6 @@ fun DetailsScreen(
                 73 -> R.drawable.ic_heavysnow
                 75 -> R.drawable.ic_heavysnow
                 77 -> R.drawable.ic_heavysnow
-                80 -> R.drawable.ic_rainshower
-                81 -> R.drawable.ic_rainshower
-                82 -> R.drawable.ic_rainshower
                 85 -> R.drawable.ic_snowy
                 86 -> R.drawable.ic_snowy
                 95 -> R.drawable.ic_thunder

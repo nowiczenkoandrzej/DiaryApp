@@ -10,6 +10,7 @@ import com.an.diaryapp.feature_add_note.domain.model.AddNoteScreenState
 import com.an.diaryapp.core.domain.model.Category
 import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.core.domain.model.Resource
+import com.an.diaryapp.core.domain.model.WeatherInfo
 import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -145,4 +146,29 @@ class AddNoteViewModel @Inject constructor(
             isDatePickerVisible = !screenState.value.isDatePickerVisible
         )
     }
+
+    fun addTestNote() {
+
+        viewModelScope.launch {
+
+            val state = screenState.value
+
+            notesRepository.addNote(
+                NoteItem(
+                    description = state.description,
+                    timestamp = state.timestamp,
+                    categories = state.selectedCategory,
+                    weatherInfo = WeatherInfo(
+                        id = null,
+                        weatherType = 81,
+                        temperature = 25.0
+                    ),
+                    location = state.location
+                )
+            )
+
+        }
+
+    }
+
 }

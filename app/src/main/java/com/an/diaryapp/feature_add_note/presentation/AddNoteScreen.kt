@@ -172,6 +172,17 @@ fun AddNoteScreen(
                 text = "Add new Note"
             )
         }
+        Button(
+            onClick = {
+                viewModel.addTestNote()
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "test"
+            )
+        }
+
     }
 
 
