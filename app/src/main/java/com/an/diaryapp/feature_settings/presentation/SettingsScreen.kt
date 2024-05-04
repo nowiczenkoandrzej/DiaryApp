@@ -1,6 +1,7 @@
 package com.an.diaryapp.feature_settings.presentation
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -33,6 +36,8 @@ import androidx.navigation.NavController
 import com.an.diaryapp.R
 import com.an.diaryapp.feature_notification.AlarmItem
 import com.an.diaryapp.feature_settings.domain.model.SettingsScreenEvent
+import com.an.diaryapp.feature_settings.presentation.components.LocationPicker
+import com.an.diaryapp.feature_settings.presentation.components.NotificationSetter
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.clock.ClockDialog
 import com.maxkeppeler.sheets.clock.models.ClockSelection
@@ -76,54 +81,34 @@ fun SettingsScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(4.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        Row (
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Checkbox(
-                checked = state.isCheckBoxChecked,
-                onCheckedChange =  { isChecked ->
-                    if(!isChecked) 
-                        viewModel.onEvent(SettingsScreenEvent.Cancel)
-                    
-                    viewModel.onEvent(SettingsScreenEvent.CheckBoxChecked)
-                }
-            )
-            
-            Text(text = "Daily Reminder")
-        }
 
-        AnimatedVisibility(visible =  state.isCheckBoxChecked) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = "Every Day at: ${state.notificationTime}")
+        NotificationSetter(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(),
+            state = state,
+            onCheckBoxCheck = { isChecked ->
+                if(!isChecked)
+                    viewModel.onEvent(SettingsScreenEvent.Cancel)
 
-                Spacer(modifier = Modifier.weight(1f))
-                
-                OutlinedButton(onClick = {
-                    viewModel.onEvent(SettingsScreenEvent.ShowTimePickerDialog)
-                }) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_access_time_24),
-                            contentDescription = null
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        
-                        Text(text = "Set Hour")
-                    }
-                }
+                viewModel.onEvent(SettingsScreenEvent.CheckBoxChecked)
+            },
+            onButtonClick =  {
+                viewModel.onEvent(SettingsScreenEvent.ShowTimePickerDialog)
             }
-        }
+        )
+
+        LocationPicker(
+            modifier = Modifier.fillMaxWidth(),
+            state = state
+        )
 
     }
+
+
 
 }

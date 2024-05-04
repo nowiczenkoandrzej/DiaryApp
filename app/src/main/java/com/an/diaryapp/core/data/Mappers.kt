@@ -1,8 +1,7 @@
 package com.an.diaryapp.core.data
 
-import androidx.annotation.DrawableRes
 import com.an.diaryapp.R
-import com.an.diaryapp.feature_add_note.data.remote.WeatherResponse
+import com.an.diaryapp.feature_weather_api.domain.WeatherResponse
 import com.an.diaryapp.core.domain.model.Category
 import com.an.diaryapp.core.domain.model.WeatherInfo
 import diaryapp.db.CategoryEntity

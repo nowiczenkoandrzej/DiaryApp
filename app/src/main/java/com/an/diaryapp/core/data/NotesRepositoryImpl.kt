@@ -1,6 +1,6 @@
 package com.an.diaryapp.core.data
 
-import com.an.diaryapp.feature_add_note.data.remote.WeatherApi
+import com.an.diaryapp.feature_weather_api.data.WeatherApi
 import com.an.diaryapp.core.domain.NoteDataSource
 import com.an.diaryapp.core.domain.repository.NotesRepository
 import com.an.diaryapp.core.domain.model.Category
@@ -137,17 +137,7 @@ class NotesRepositoryImpl @Inject constructor(
         db.deleteNote(id)
     }
 
-    override suspend fun getWeatherInfo(lat: Double, long: Double): Resource<WeatherInfo> {
-        return try {
-            val weather = weatherApi.getWeatherData(lat, long)
 
-            Resource.Success(
-                data = weather.toWeatherInfo()
-            )
-        } catch (e: Exception) {
-            Resource.Error(e.message.toString())
-        }
-    }
 
     override suspend fun getNoteFromDates(startDate: LocalDate, endDate: LocalDate): Resource<List<NoteItem>> {
         return try {

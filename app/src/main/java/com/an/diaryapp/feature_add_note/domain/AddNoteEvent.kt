@@ -1,4 +1,4 @@
-package com.an.diaryapp.feature_add_note.domain.model
+package com.an.diaryapp.feature_add_note.domain
 
 import com.an.diaryapp.core.domain.model.Category
 import java.time.LocalDate

@@ -1,4 +1,4 @@
-package com.an.diaryapp.feature_add_note.domain
+package com.an.diaryapp.feature_location.domain
 
 import android.location.Location
 

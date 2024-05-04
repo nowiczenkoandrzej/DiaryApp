@@ -1,4 +1,4 @@
-package com.an.diaryapp.feature_add_note.data.location
+package com.an.diaryapp.feature_location.data
 
 import android.Manifest
 import android.app.Application
@@ -6,9 +6,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
-import android.util.Log
 import androidx.core.content.ContextCompat
-import com.an.diaryapp.feature_add_note.domain.LocationTracker
+import com.an.diaryapp.feature_location.domain.LocationTracker
 import com.google.android.gms.location.FusedLocationProviderClient
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
@@ -52,11 +51,9 @@ class DefaultLocationTracker @Inject constructor(
                     return@suspendCancellableCoroutine
                 }
                 addOnSuccessListener {
-                    Log.d("dupa", "getCurrentLocation: $it ")
                     cont.resume(it)
                 }
                 addOnFailureListener {
-                    Log.d("dupa", "getCurrentLocation: failure")
                     cont.resume(null)
                 }
                 addOnCanceledListener {

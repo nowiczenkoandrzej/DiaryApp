@@ -4,14 +4,16 @@ import android.location.Geocoder
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.an.diaryapp.feature_add_note.domain.LocationTracker
+import com.an.diaryapp.feature_location.domain.LocationTracker
 import com.an.diaryapp.core.domain.repository.NotesRepository
-import com.an.diaryapp.feature_add_note.domain.model.AddNoteScreenState
+import com.an.diaryapp.feature_add_note.domain.AddNoteScreenState
 import com.an.diaryapp.core.domain.model.Category
 import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.core.domain.model.Resource
 import com.an.diaryapp.core.domain.model.WeatherInfo
 import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
+import com.an.diaryapp.feature_location.domain.LocationRepository
+import com.an.diaryapp.feature_weather_api.domain.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,8 +25,8 @@ import javax.inject.Inject
 class AddNoteViewModel @Inject constructor(
     private val notesRepository: NotesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val locationTracker: LocationTracker,
-    private val geocoder: Geocoder
+    private val weatherRepository: WeatherRepository,
+    private val locationRepository: LocationRepository,
 ): ViewModel() {
 
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
@@ -98,40 +100,31 @@ class AddNoteViewModel @Inject constructor(
     fun getWeatherInfo() {
         viewModelScope.launch {
 
-            locationTracker.getCurrentLocation()?.let { location ->
+            locationRepository.getLocation()?.let { location ->
 
-                val result = notesRepository.getWeatherInfo(
-                    lat = location.latitude,
-                    long = location.longitude
-                )
-
-                val address = geocoder.getFromLocation(
-                    location.latitude,
-                    location.longitude,
-                    1,
-                )
-
-                val locationCity = address?.let { adresses ->
-                    address[0].locality
-                }
-
-                locationCity?.let {
+                locationRepository.getCityNameFromLocation(location)?.let {
                     _screenState.value = screenState.value.copy(
                         location = it
                     )
                 }
 
-                when(result) {
+                val weatherInfo = weatherRepository.getWeatherInfo(
+                    lat = location.latitude,
+                    long = location.longitude
+                )
+
+                when(weatherInfo) {
                     is Resource.Success -> {
                         _screenState.value = screenState.value.copy(
-                            weatherInfo = result.data
+                            weatherInfo = weatherInfo.data
                         )
                     }
                     is Resource.Error -> {
-                        Log.d("TAG", "getWeatherInfo: ${result.error}")
+                        Log.d("TAG", "getWeatherInfo: ${weatherInfo.error}")
                     }
                 }
             }
+
         }
     }
 

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -22,9 +24,19 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+
+        buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${properties.getProperty("GOOGLE_MAPS_API_KEY ")}\"")
+
     }
 
     buildTypes {
+        android.buildFeatures.buildConfig = true
+        debug {
+            isMinifyEnabled = true 
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -77,10 +89,10 @@ dependencies {
     //Compose Constraints
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
-    // Compose runtime
+    // Compose Runtime
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0-rc01")
 
-    // Navigation compose
+    // Navigation Compose
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
     // SqlDelight
@@ -110,8 +122,11 @@ dependencies {
     implementation("androidx.datastore:datastore:1.0.0")
     implementation("androidx.datastore:datastore-preferences-android:1.1.0-rc01")
 
-    // Serialization json
+    // Serialization Json
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+
+    // Google Maps SDK
+    implementation("com.google.maps.android:maps-compose:4.3.3")
 
 }
 

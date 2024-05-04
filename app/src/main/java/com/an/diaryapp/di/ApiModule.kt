@@ -1,6 +1,6 @@
 package com.an.diaryapp.di
 
-import com.an.diaryapp.feature_add_note.data.remote.WeatherApi
+import com.an.diaryapp.feature_weather_api.data.WeatherApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

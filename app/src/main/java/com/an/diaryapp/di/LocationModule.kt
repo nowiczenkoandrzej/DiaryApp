@@ -2,8 +2,8 @@ package com.an.diaryapp.di
 
 import android.app.Application
 import android.location.Geocoder
-import com.an.diaryapp.feature_add_note.data.location.DefaultLocationTracker
-import com.an.diaryapp.feature_add_note.domain.LocationTracker
+import com.an.diaryapp.feature_location.data.DefaultLocationTracker
+import com.an.diaryapp.feature_location.domain.LocationTracker
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Binds

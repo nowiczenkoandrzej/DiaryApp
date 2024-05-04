@@ -1,5 +1,6 @@
-package com.an.diaryapp.feature_add_note.data.remote
+package com.an.diaryapp.feature_weather_api.data
 
+import com.an.diaryapp.feature_weather_api.domain.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

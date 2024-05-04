@@ -1,4 +1,4 @@
-package com.an.diaryapp.feature_add_note.data.remote
+package com.an.diaryapp.feature_weather_api.domain
 
 import com.squareup.moshi.Json
 

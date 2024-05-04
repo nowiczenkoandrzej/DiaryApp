@@ -18,11 +18,6 @@ interface NotesRepository {
 
     suspend fun deleteNote(id: Long)
 
-    suspend fun getWeatherInfo(
-        lat: Double,
-        long: Double
-    ): Resource<WeatherInfo>
-
     suspend fun getNoteFromDates(
         startDate: LocalDate,
         endDate: LocalDate
