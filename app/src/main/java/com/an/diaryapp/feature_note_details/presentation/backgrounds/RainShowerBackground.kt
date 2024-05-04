@@ -1,5 +1,6 @@
 package com.an.diaryapp.feature_note_details.presentation.backgrounds
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -10,22 +11,34 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Canvas
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.an.diaryapp.R
+import com.an.diaryapp.feature_note_details.presentation.components.Raindrop
+import com.an.diaryapp.feature_note_details.presentation.components.RainshowerAnimation
 import com.an.diaryapp.ui.theme.BackgroundCloudySky
+import kotlinx.coroutines.CoroutineScope
 import java.util.Random
 
 @Composable
 fun RainShowerBackground() {
+
 
     val configuration = LocalConfiguration.current
 
@@ -68,45 +81,15 @@ fun RainShowerBackground() {
             }
     ) {
 
-        repeat(30) {
+        RainshowerAnimation(
+            modifier = Modifier
+                .offset(
+                    x = (screenWidth / 2).dp,
+                    y = (screenHeight / 6).dp
+                ),
+        )
 
-            val min = 200.0f
-            val max = 320.0f
-            val randomStart = Random().nextFloat() * (max - min) + min
 
-            val rainOffsetX = infiniteTransition.animateFloat(
-                initialValue = randomStart,
-                targetValue = randomStart - 30f,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(durationMillis = 300),
-                    repeatMode = RepeatMode.Restart
-                )
-            )
-
-            val rainOffsetY = infiniteTransition.animateFloat(
-                initialValue = cloudOffset1.value,
-                targetValue = cloudOffset1.value + 50f,
-                animationSpec = infiniteRepeatable(
-                    animation = keyframes {
-                        durationMillis = 300
-                        0f at 0 with LinearEasing // Initial position
-                        50f at 300 // End position
-                    },
-                    repeatMode = RepeatMode.Restart
-                )
-            )
-
-            Image(
-                painter = rainDropPainter,
-                contentDescription = null,
-                modifier = Modifier
-                    .offset(
-                        x = rainOffsetX.value.dp,
-                        y = rainOffsetY.value.dp
-                    )
-            )
-
-        }
 
 
         Image(
@@ -116,7 +99,7 @@ fun RainShowerBackground() {
                 .size((screenWidth / 5 * 2).dp)
                 .offset(
                     x = cloudOffset1.value.dp,
-                    y = (screenWidth / 7).dp
+                    y = (screenHeight / 20).dp
                 )
         )
 
@@ -127,9 +110,12 @@ fun RainShowerBackground() {
                 .size((screenWidth / 5 * 2).dp)
                 .offset(
                     x = cloudOffset2.value.dp,
-                    y = (screenWidth / 9).dp
+                    y = (screenHeight / 24).dp
                 )
         )
+
+
+
 
 
 
