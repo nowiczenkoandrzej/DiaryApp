@@ -4,9 +4,9 @@ import android.app.AlarmManager
 import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
-import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
-import com.an.diaryapp.feature_notification.AlarmSchedulerImpl
-import com.an.diaryapp.feature_notification.AlarmScheduler
+import com.an.diaryapp.feature_notification.domain.NotificationPreferencesRepository
+import com.an.diaryapp.feature_notification.data.AlarmSchedulerImpl
+import com.an.diaryapp.feature_notification.domain.AlarmScheduler
 import com.an.diaryapp.feature_notification.NotificationService
 import dagger.Binds
 import dagger.Module
@@ -44,11 +44,11 @@ class NotificationModule {
     fun provideNotificationService(
         @ApplicationContext app: Context,
         notificationManager: NotificationManager,
-        userPreferencesRepository: UserPreferencesRepository
+        notificationPreferencesRepository: NotificationPreferencesRepository
     ): NotificationService = NotificationService(
         app,
         notificationManager,
-        userPreferencesRepository
+        notificationPreferencesRepository
     )
 }
 

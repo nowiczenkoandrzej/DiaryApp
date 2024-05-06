@@ -1,4 +1,4 @@
-package com.an.diaryapp.core.data.data_store
+package com.an.diaryapp.feature_notification.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -6,14 +6,13 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
+import com.an.diaryapp.feature_notification.domain.NotificationPreferencesRepository
 import kotlinx.coroutines.flow.first
-import java.time.LocalTime
 import javax.inject.Inject
 
-class UserPreferencesRepositoryImpl @Inject constructor(
+class NotificationPreferencesRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
-): UserPreferencesRepository{
+): NotificationPreferencesRepository {
 
     companion object {
         private val hasNoteBeenAddedKey = booleanPreferencesKey("has_note_been_added")
@@ -28,8 +27,8 @@ class UserPreferencesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getIsNoteAdded(): Boolean? {
-
         val preferences = dataStore.data.first()
+
         return try {
             preferences[hasNoteBeenAddedKey] as Boolean
         } catch (e: NullPointerException) {

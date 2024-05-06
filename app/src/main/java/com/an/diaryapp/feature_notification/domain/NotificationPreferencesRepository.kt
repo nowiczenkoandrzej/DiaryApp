@@ -1,8 +1,6 @@
-package com.an.diaryapp.core.domain.repository
+package com.an.diaryapp.feature_notification.domain
 
-import java.time.LocalTime
-
-interface UserPreferencesRepository {
+interface NotificationPreferencesRepository {
 
     suspend fun setIsNoteAdded(isAdded: Boolean)
     suspend fun getIsNoteAdded(): Boolean?

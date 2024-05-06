@@ -1,10 +1,8 @@
 package com.an.diaryapp.feature_notification
 
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -17,9 +15,6 @@ class AlarmReceiver: BroadcastReceiver() {
         if(context == null) return
 
         notificationService.showNotification()
-
-
-
 
     }
 

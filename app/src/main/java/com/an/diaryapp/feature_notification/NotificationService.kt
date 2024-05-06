@@ -7,11 +7,9 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import com.an.diaryapp.MainActivity
 import com.an.diaryapp.R
-import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
+import com.an.diaryapp.feature_notification.domain.NotificationPreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,12 +18,12 @@ import javax.inject.Inject
 class NotificationService @Inject constructor(
     private val context: Context,
     private val notificationManager: NotificationManager,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val notificationPreferencesRepository: NotificationPreferencesRepository
 ) {
 
     fun showNotification() {
         CoroutineScope(Dispatchers.IO).launch {
-            val hasNoteBeenAddedToday = userPreferencesRepository.getIsNoteAdded() ?: false
+            val hasNoteBeenAddedToday = notificationPreferencesRepository.getIsNoteAdded() ?: false
 
             Log.d("TAG", "showNotification: alarm received, has note been added: $hasNoteBeenAddedToday")
 
@@ -54,7 +52,7 @@ class NotificationService @Inject constructor(
 
                 Log.d("TAG", "showNotification: notification shown")
             } else {
-                userPreferencesRepository.setIsNoteAdded(false)
+                notificationPreferencesRepository.setIsNoteAdded(false)
                 Log.d("TAG", "showNotification: notification didnt show up")
             }
         }

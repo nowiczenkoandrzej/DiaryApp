@@ -1,4 +1,4 @@
-package com.an.diaryapp.feature_notification
+package com.an.diaryapp.feature_notification.domain
 
 import java.time.LocalDateTime
 

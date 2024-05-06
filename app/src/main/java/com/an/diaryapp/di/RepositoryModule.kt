@@ -1,11 +1,13 @@
 package com.an.diaryapp.di
 
 import com.an.diaryapp.core.data.NotesRepositoryImpl
-import com.an.diaryapp.core.data.data_store.UserPreferencesRepositoryImpl
+import com.an.diaryapp.feature_notification.data.NotificationPreferencesRepositoryImpl
 
 import com.an.diaryapp.core.domain.repository.NotesRepository
-import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
+import com.an.diaryapp.feature_location.data.LocationPreferencesRepositoryImpl
+import com.an.diaryapp.feature_notification.domain.NotificationPreferencesRepository
 import com.an.diaryapp.feature_location.data.LocationRepositoryImpl
+import com.an.diaryapp.feature_location.domain.LocationPreferencesRepository
 import com.an.diaryapp.feature_location.domain.LocationRepository
 import com.an.diaryapp.feature_weather_api.data.WeatherRepositoryImpl
 import com.an.diaryapp.feature_weather_api.domain.WeatherRepository
@@ -29,9 +31,9 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindPreferencesRepository(
-        repository: UserPreferencesRepositoryImpl
-    ): UserPreferencesRepository
+    abstract fun bindNotificationPreferencesRepository(
+        repository: NotificationPreferencesRepositoryImpl
+    ): NotificationPreferencesRepository
 
     @Binds
     @Singleton
@@ -44,5 +46,11 @@ abstract class RepositoryModule {
     abstract fun bindWeatherRepository(
         repository: WeatherRepositoryImpl
     ): WeatherRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindLocationPreferencesRepository(
+        repository: LocationPreferencesRepositoryImpl
+    ): LocationPreferencesRepository
 
 }

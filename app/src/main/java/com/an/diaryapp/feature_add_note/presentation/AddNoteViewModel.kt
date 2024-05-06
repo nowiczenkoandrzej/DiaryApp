@@ -1,17 +1,15 @@
 package com.an.diaryapp.feature_add_note.presentation
 
-import android.location.Geocoder
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.an.diaryapp.feature_location.domain.LocationTracker
 import com.an.diaryapp.core.domain.repository.NotesRepository
 import com.an.diaryapp.feature_add_note.domain.AddNoteScreenState
 import com.an.diaryapp.core.domain.model.Category
 import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.core.domain.model.Resource
 import com.an.diaryapp.core.domain.model.WeatherInfo
-import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
+import com.an.diaryapp.feature_notification.domain.NotificationPreferencesRepository
 import com.an.diaryapp.feature_location.domain.LocationRepository
 import com.an.diaryapp.feature_weather_api.domain.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddNoteViewModel @Inject constructor(
     private val notesRepository: NotesRepository,
-    private val userPreferencesRepository: UserPreferencesRepository,
+    private val notificationPreferencesRepository: NotificationPreferencesRepository,
     private val weatherRepository: WeatherRepository,
     private val locationRepository: LocationRepository,
 ): ViewModel() {
@@ -93,7 +91,7 @@ class AddNoteViewModel @Inject constructor(
                 )
             )
 
-            userPreferencesRepository.setIsNoteAdded(true)
+            notificationPreferencesRepository.setIsNoteAdded(true)
         }
     }
 

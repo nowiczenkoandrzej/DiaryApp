@@ -28,17 +28,17 @@ android {
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
 
-        buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${properties.getProperty("GOOGLE_MAPS_API_KEY ")}\"")
+        manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = properties.getProperty("GOOGLE_MAPS_API_KEY")
 
     }
 
     buildTypes {
-        android.buildFeatures.buildConfig = true
+        //android.buildFeatures.buildConfig = true
         debug {
-            isMinifyEnabled = true 
+            isMinifyEnabled = true
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -106,9 +106,12 @@ dependencies {
     // Hilt Navigation
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
-    //Retrofit2
+    // Retrofit2
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+
+    // Logging Interceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     // Location Services
     implementation("com.google.android.gms:play-services-location:21.0.1")

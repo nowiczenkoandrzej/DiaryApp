@@ -1,10 +1,13 @@
-package com.an.diaryapp.feature_notification
+package com.an.diaryapp.feature_notification.data
 
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.an.diaryapp.core.domain.repository.UserPreferencesRepository
+import com.an.diaryapp.feature_notification.AlarmReceiver
+import com.an.diaryapp.feature_notification.domain.NotificationPreferencesRepository
+import com.an.diaryapp.feature_notification.domain.AlarmItem
+import com.an.diaryapp.feature_notification.domain.AlarmScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,7 +17,7 @@ import javax.inject.Inject
 class AlarmSchedulerImpl @Inject constructor(
     private val context: Context,
     private val alarmManager: AlarmManager,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val notificationPreferencesRepository: NotificationPreferencesRepository
 ): AlarmScheduler {
 
     override fun schedule(item: AlarmItem) {
@@ -28,9 +31,9 @@ class AlarmSchedulerImpl @Inject constructor(
 
             cancel()
 
-            userPreferencesRepository.setIsNoteAdded(false)
+            notificationPreferencesRepository.setIsNoteAdded(false)
 
-            userPreferencesRepository.setAlarmId(hashCode)
+            notificationPreferencesRepository.setAlarmId(hashCode)
 
             alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
@@ -51,7 +54,7 @@ class AlarmSchedulerImpl @Inject constructor(
 
         CoroutineScope(Dispatchers.IO).launch {
 
-            val hashCode = userPreferencesRepository.getAlarmId()
+            val hashCode = notificationPreferencesRepository.getAlarmId()
 
             alarmManager.cancel(
                 PendingIntent.getBroadcast(
