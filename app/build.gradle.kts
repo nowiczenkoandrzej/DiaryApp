@@ -83,6 +83,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("androidx.compose.material3:material3:1.2.0-rc01")
+    implementation("org.slf4j:slf4j-nop:1.7.30")
 
 
 
@@ -109,6 +110,17 @@ dependencies {
     // Retrofit2
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Ktor Client
+    implementation("io.ktor:ktor-client-core:2.3.6")
+    implementation("io.ktor:ktor-client-android:2.3.6")
+    implementation("io.ktor:ktor-client-serialization:2.3.6")
+    //implementation("io.ktor:ktor-client-logging:2.3.6")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.6")
+    //implementation("ch.qos.logback:logback-classic:1.2.3")
+
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.6")
 
     // Logging Interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")

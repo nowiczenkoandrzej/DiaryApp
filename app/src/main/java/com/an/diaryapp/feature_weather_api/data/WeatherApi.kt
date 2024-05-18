@@ -1,6 +1,6 @@
 package com.an.diaryapp.feature_weather_api.data
 
-import com.an.diaryapp.feature_weather_api.domain.WeatherResponse
+import com.an.diaryapp.feature_weather_api.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

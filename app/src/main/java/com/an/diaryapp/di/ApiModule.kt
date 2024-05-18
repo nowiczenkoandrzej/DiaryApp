@@ -1,6 +1,7 @@
 package com.an.diaryapp.di
 
 import com.an.diaryapp.feature_weather_api.data.WeatherApi
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -8,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
@@ -35,8 +37,13 @@ object ApiModule {
 
     @Provides
     @Singleton
+    fun provideGsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create(GsonBuilder().serializeNulls().create())
+
+
+    @Provides
+    @Singleton
     fun provideWeatherApi(
-        converterFactory: MoshiConverterFactory,
+        converterFactory: GsonConverterFactory,
         client: OkHttpClient
     ): WeatherApi = Retrofit.Builder()
             .baseUrl("https://api.open-meteo.com/")
@@ -44,6 +51,7 @@ object ApiModule {
             .addConverterFactory(converterFactory)
             .build()
             .create()
+
 
 
 }
