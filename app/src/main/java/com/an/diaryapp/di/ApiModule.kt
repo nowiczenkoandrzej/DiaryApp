@@ -1,17 +1,18 @@
 package com.an.diaryapp.di
 
-import com.an.diaryapp.feature_weather_api.data.WeatherApi
-import com.google.gson.GsonBuilder
+import com.an.diaryapp.feature_weather_api.data.WeatherServiceImpl
+import com.an.diaryapp.feature_weather_api.domain.WeatherService
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.android.Android
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 
@@ -19,39 +20,32 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiModule {
 
+    private const val BASE_URL = "https://api.open-meteo.com/"
+
     @Provides
     @Singleton
-    fun provideHttpClientWithLoggingInterceptor(): OkHttpClient {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+    fun provideHttpClient(): HttpClient {
+        return HttpClient(Android) {
+            defaultRequest { url(BASE_URL) }
 
-        return OkHttpClient
-            .Builder()
-            .addInterceptor(interceptor)
-            .build()
+            install(ContentNegotiation) {
+                json(Json{
+                    ignoreUnknownKeys = true
+                })
+            }
+        }
     }
+}
 
-    @Provides
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class ServiceModule {
+
+    @Binds
     @Singleton
-    fun provideMoshiConverterFactory(): MoshiConverterFactory = MoshiConverterFactory.create()
-
-    @Provides
-    @Singleton
-    fun provideGsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create(GsonBuilder().serializeNulls().create())
-
-
-    @Provides
-    @Singleton
-    fun provideWeatherApi(
-        converterFactory: GsonConverterFactory,
-        client: OkHttpClient
-    ): WeatherApi = Retrofit.Builder()
-            .baseUrl("https://api.open-meteo.com/")
-            .client(client)
-            .addConverterFactory(converterFactory)
-            .build()
-            .create()
-
-
+    abstract fun bindWeatherService(
+        service: WeatherServiceImpl
+    ): WeatherService
 
 }
+

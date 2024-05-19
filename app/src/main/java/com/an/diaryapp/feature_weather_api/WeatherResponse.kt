@@ -1,9 +1,14 @@
 package com.an.diaryapp.feature_weather_api
 
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class WeatherResponse(
-    @SerializedName("current")
-    val currentWeather: CurrentWeather,
-)
+    val current: Current
+) {
+    @Serializable
+    data class Current(
+        val temperature_2m: Double,
+        val weather_code: Long
+    )
+}

@@ -1,6 +1,5 @@
 package com.an.diaryapp.core.data
 
-import com.an.diaryapp.feature_weather_api.data.WeatherApi
 import com.an.diaryapp.core.domain.NoteDataSource
 import com.an.diaryapp.core.domain.repository.NotesRepository
 import com.an.diaryapp.core.domain.model.Category
@@ -10,8 +9,7 @@ import com.an.diaryapp.core.domain.model.WeatherInfo
 import java.time.LocalDate
 import javax.inject.Inject
 class NotesRepositoryImpl @Inject constructor(
-    private val db: NoteDataSource,
-    private val weatherApi: WeatherApi
+    private val db: NoteDataSource
 ): NotesRepository {
 
     override suspend fun getAllCategories(): Resource<List<Category>> {
