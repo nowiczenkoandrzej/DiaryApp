@@ -99,10 +99,10 @@ fun SettingsScreen(
                 viewModel.onEvent(SettingsScreenEvent.SelectLocation(location))
             },
             onSaveLocationButtonClick = {
-
+                viewModel.onEvent(SettingsScreenEvent.SetDefaultLocation)
             },
             onSwitchChecked = {
-                
+                viewModel.onEvent(SettingsScreenEvent.CheckLocationSwitch)
             },
             onGetLocation = {
                 viewModel.onEvent(SettingsScreenEvent.GetLocation)

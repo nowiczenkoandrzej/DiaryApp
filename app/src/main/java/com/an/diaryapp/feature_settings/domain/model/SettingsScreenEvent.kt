@@ -10,10 +10,10 @@ sealed class SettingsScreenEvent {
     object ShowTimePickerDialog: SettingsScreenEvent()
     object TimePickerDialogShown: SettingsScreenEvent()
     object CheckNotificationSwitch: SettingsScreenEvent()
+
+
     data class SelectLocation(val location: Location): SettingsScreenEvent()
-
-
-    data class SetDefaultLocation(val location: Location): SettingsScreenEvent()
+    object SetDefaultLocation: SettingsScreenEvent()
     object CheckLocationSwitch: SettingsScreenEvent()
     object ShowLocationDialog: SettingsScreenEvent()
     object GetLocation: SettingsScreenEvent()

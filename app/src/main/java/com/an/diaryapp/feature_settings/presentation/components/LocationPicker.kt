@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -69,6 +70,9 @@ fun LocationPicker(
     var showBottomSheet by remember { mutableStateOf(false) }
 
     if(showBottomSheet) {
+        sheetScope.launch {
+            sheetState.expand()
+        }
         ModalBottomSheet(
             onDismissRequest = {
                 showBottomSheet = false
@@ -76,7 +80,7 @@ fun LocationPicker(
             sheetState = sheetState
         ) {
             Column(
-                modifier = modifier
+                modifier = Modifier.fillMaxSize()
             ) {
                 GoogleMap(
                     modifier = Modifier
@@ -112,6 +116,7 @@ fun LocationPicker(
                         }.invokeOnCompletion {
                             if(!sheetState.isVisible)
                                 showBottomSheet = false
+                            onSaveLocationButtonClick()
                         }
                     }) {
                         Text(text = "Save")
@@ -123,13 +128,13 @@ fun LocationPicker(
 
     Column {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier
         ) {
             Switch(
-                checked = state.isDefaultLocationPicked,
+                checked = state.isSwitchChecked,
                 onCheckedChange =  { isChecked ->
                     onSwitchChecked(isChecked)
-                    sheetScope.launch { if(isChecked) showBottomSheet = true }
                 }
             )
             Spacer(modifier = Modifier.width(8.dp))

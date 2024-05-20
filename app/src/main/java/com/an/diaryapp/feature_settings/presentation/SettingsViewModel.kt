@@ -1,5 +1,6 @@
 package com.an.diaryapp.feature_settings.presentation
 
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.an.diaryapp.feature_location.domain.LocationPreferencesRepository
@@ -101,7 +102,9 @@ class SettingsViewModel @Inject constructor(
                     isSwitchChecked = !locationState.value.isSwitchChecked
                 )
             }
-            is SettingsScreenEvent.SetDefaultLocation -> TODO()
+            is SettingsScreenEvent.SetDefaultLocation -> {
+                saveDefaultLocation()
+            }
             SettingsScreenEvent.ShowLocationDialog -> {}
             SettingsScreenEvent.GetLocation -> {
 
@@ -117,6 +120,9 @@ class SettingsViewModel @Inject constructor(
                             defaultLocationLong = currentLocation.longitude,
                             defaultLocation = currentLocationName ?: ""
                         )
+
+                        saveDefaultLocation()
+
                     }
                 }
 
@@ -162,6 +168,26 @@ class SettingsViewModel @Inject constructor(
         }
 
     }
+
+    private fun saveDefaultLocation() {
+        viewModelScope.launch {
+
+            val defaultLocation = Location("default_location")
+            defaultLocation.latitude = locationState.value.defaultLocationLat
+            defaultLocation.longitude = locationState.value.defaultLocationLong
+
+            locationPreferencesRepository.setIsDefaultLocationPicked(true)
+            locationPreferencesRepository.saveDefaultLocation(defaultLocation)
+            locationPreferencesRepository.setDefaultLocationName(locationState.value.defaultLocation)
+
+            _locationState.value = locationState.value.copy(
+                isDefaultLocationPicked = true,
+                isSwitchChecked = true,
+            )
+
+        }
+    }
+
 
 
 
