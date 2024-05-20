@@ -17,12 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.an.diaryapp.R
-import com.an.diaryapp.feature_settings.domain.model.SettingsScreenState
+import com.an.diaryapp.feature_settings.domain.model.SettingsNotificationState
 
 @Composable
 fun NotificationSetter(
     modifier: Modifier,
-    state: SettingsScreenState,
+    state: SettingsNotificationState,
     onCheckBoxCheck: (isChecked: Boolean) -> Unit,
     onButtonClick: () -> Unit
 ) {

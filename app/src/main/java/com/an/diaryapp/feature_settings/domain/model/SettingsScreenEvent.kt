@@ -6,10 +6,17 @@ import java.time.LocalTime
 sealed class SettingsScreenEvent {
 
     data class Schedule(val time: LocalTime): SettingsScreenEvent()
-    object Cancel: SettingsScreenEvent()
+    object CancelNotification: SettingsScreenEvent()
     object ShowTimePickerDialog: SettingsScreenEvent()
     object TimePickerDialogShown: SettingsScreenEvent()
-    object CheckBoxChecked: SettingsScreenEvent()
+    object CheckNotificationSwitch: SettingsScreenEvent()
     data class SelectLocation(val location: Location): SettingsScreenEvent()
+
+
+    data class SetDefaultLocation(val location: Location): SettingsScreenEvent()
+    object CheckLocationSwitch: SettingsScreenEvent()
+    object ShowLocationDialog: SettingsScreenEvent()
+    object GetLocation: SettingsScreenEvent()
+
 
 }

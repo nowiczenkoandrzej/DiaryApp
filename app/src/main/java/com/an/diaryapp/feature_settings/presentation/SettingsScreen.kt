@@ -32,8 +32,13 @@ fun SettingsScreen(
     viewModel: SettingsViewModel
 ) {
     
-    val state = viewModel
-        .screenState
+    val notificationState = viewModel
+        .notificationState
+        .collectAsState()
+        .value
+
+    val locationState = viewModel
+        .locationState
         .collectAsState()
         .value
 
@@ -51,8 +56,8 @@ fun SettingsScreen(
         }
     )
 
-    LaunchedEffect(state.isTimePickerDialogVisible) {
-        if(state.isTimePickerDialogVisible) {
+    LaunchedEffect(notificationState.isTimePickerDialogVisible) {
+        if(notificationState.isTimePickerDialogVisible) {
             clockState.show()
             viewModel.onEvent(SettingsScreenEvent.TimePickerDialogShown)
         }
@@ -69,12 +74,12 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(),
-            state = state,
+            state = notificationState,
             onCheckBoxCheck = { isChecked ->
                 if(!isChecked)
-                    viewModel.onEvent(SettingsScreenEvent.Cancel)
+                    viewModel.onEvent(SettingsScreenEvent.CancelNotification)
 
-                viewModel.onEvent(SettingsScreenEvent.CheckBoxChecked)
+                viewModel.onEvent(SettingsScreenEvent.CheckNotificationSwitch)
             },
             onButtonClick =  {
                 viewModel.onEvent(SettingsScreenEvent.ShowTimePickerDialog)
@@ -89,12 +94,18 @@ fun SettingsScreen(
 
         LocationPicker(
             modifier = Modifier.fillMaxWidth(),
-            state = state,
+            state = locationState,
             onMapClick = { location ->
                 viewModel.onEvent(SettingsScreenEvent.SelectLocation(location))
             },
-            onSaveButtonClick = {
+            onSaveLocationButtonClick = {
 
+            },
+            onSwitchChecked = {
+                
+            },
+            onGetLocation = {
+                viewModel.onEvent(SettingsScreenEvent.GetLocation)
             }
         )
 

@@ -7,7 +7,8 @@ import com.an.diaryapp.feature_notification.domain.NotificationPreferencesReposi
 import com.an.diaryapp.feature_location.domain.LocationRepository
 import com.an.diaryapp.feature_notification.domain.AlarmItem
 import com.an.diaryapp.feature_notification.domain.AlarmScheduler
-import com.an.diaryapp.feature_settings.domain.model.SettingsScreenState
+import com.an.diaryapp.feature_settings.domain.model.SettingsLocationState
+import com.an.diaryapp.feature_settings.domain.model.SettingsNotificationState
 import com.an.diaryapp.feature_settings.domain.model.SettingsScreenEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,17 +30,30 @@ class SettingsViewModel @Inject constructor(
     private val alarmScheduler: AlarmScheduler
 ): ViewModel() {
 
-    private val _screenState = MutableStateFlow(SettingsScreenState())
-    val screenState = _screenState.asStateFlow()
+    private val _notificationState = MutableStateFlow(SettingsNotificationState())
+    val notificationState = _notificationState.asStateFlow()
+
+    private val _locationState = MutableStateFlow(SettingsLocationState())
+    val locationState = _locationState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            _screenState.value = SettingsScreenState(
+            _notificationState.value = SettingsNotificationState(
                 isNotificationScheduled = notificationPreferencesRepository.getIsNotificationScheduled(),
                 notificationTime = notificationPreferencesRepository.getNotificationTime(),
                 isTimePickerDialogVisible = false,
                 isNotificationSwitchChecked = notificationPreferencesRepository.getIsNotificationScheduled()
             )
+
+            if(locationPreferencesRepository.getIsDefaultLocationPicked()) {
+                _locationState.value = SettingsLocationState(
+                    isDefaultLocationPicked = true,
+                    isSwitchChecked = true,
+                    defaultLocation = locationPreferencesRepository.getDefaultLocationName(),
+                    defaultLocationLat = locationPreferencesRepository.getDefaultLocation().latitude,
+                    defaultLocationLong = locationPreferencesRepository.getDefaultLocation().longitude,
+                )
+            }
         }
     }
 
@@ -47,24 +61,24 @@ class SettingsViewModel @Inject constructor(
     fun onEvent(event: SettingsScreenEvent)  {
         when (event) {
 
-            SettingsScreenEvent.Cancel -> cancel()
+            SettingsScreenEvent.CancelNotification -> cancel()
 
             is SettingsScreenEvent.Schedule -> schedule(event.time)
 
             SettingsScreenEvent.ShowTimePickerDialog -> {
-                _screenState.value = screenState.value.copy(
+                _notificationState.value = notificationState.value.copy(
                     isTimePickerDialogVisible = true
                 )
             }
             SettingsScreenEvent.TimePickerDialogShown ->  {
-                _screenState.value = screenState.value.copy(
+                _notificationState.value = notificationState.value.copy(
                     isTimePickerDialogVisible = false
                 )
             }
 
-            SettingsScreenEvent.CheckBoxChecked -> {
-                _screenState.value = screenState.value.copy(
-                    isNotificationSwitchChecked = !screenState.value.isNotificationSwitchChecked
+            SettingsScreenEvent.CheckNotificationSwitch -> {
+                _notificationState.value = notificationState.value.copy(
+                    isNotificationSwitchChecked = !notificationState.value.isNotificationSwitchChecked
                 )
             }
 
@@ -73,11 +87,37 @@ class SettingsViewModel @Inject constructor(
                 viewModelScope.launch {
                     val locationName = locationRepository.getCityNameFromLocation(event.location)
 
-                    _screenState.value = screenState.value.copy(
+                    _locationState.value = locationState.value.copy(
                         defaultLocationLat = event.location.latitude,
                         defaultLocationLong = event.location.longitude,
                         defaultLocation = locationName ?: ""
                     )
+                }
+
+            }
+
+            SettingsScreenEvent.CheckLocationSwitch ->  {
+                _locationState.value = locationState.value.copy(
+                    isSwitchChecked = !locationState.value.isSwitchChecked
+                )
+            }
+            is SettingsScreenEvent.SetDefaultLocation -> TODO()
+            SettingsScreenEvent.ShowLocationDialog -> {}
+            SettingsScreenEvent.GetLocation -> {
+
+                viewModelScope.launch {
+                    val currentLocation = locationRepository.getLocation()
+
+                    if(currentLocation != null) {
+
+                        val currentLocationName = locationRepository.getCityNameFromLocation(currentLocation)
+
+                        _locationState.value = locationState.value.copy(
+                            defaultLocationLat = currentLocation.latitude,
+                            defaultLocationLong = currentLocation.longitude,
+                            defaultLocation = currentLocationName ?: ""
+                        )
+                    }
                 }
 
             }
@@ -102,7 +142,7 @@ class SettingsViewModel @Inject constructor(
             notificationPreferencesRepository.setIsNotificationScheduled(true)
             notificationPreferencesRepository.setNotificationTime(localTime.toString())
 
-            _screenState.value = screenState.value.copy(
+            _notificationState.value = notificationState.value.copy(
                 notificationTime = localTime.toString(),
                 isNotificationScheduled = true
             )
@@ -115,7 +155,7 @@ class SettingsViewModel @Inject constructor(
             notificationPreferencesRepository.setIsNotificationScheduled(false)
             notificationPreferencesRepository.setNotificationTime("")
 
-            _screenState.value = screenState.value.copy(
+            _notificationState.value = notificationState.value.copy(
                 isNotificationScheduled = false,
                 notificationTime = ""
             )
