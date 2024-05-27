@@ -1,6 +1,7 @@
 package com.an.diaryapp.feature_settings.presentation.components
 
 import android.location.Location
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import com.an.diaryapp.R
 import com.an.diaryapp.feature_settings.domain.model.SettingsLocationState
 import com.an.diaryapp.feature_settings.domain.model.SettingsNotificationState
+import com.google.android.gms.maps.CameraUpdate
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -53,21 +57,50 @@ fun LocationPicker(
 
 ) {
 
+
+
+
     val location = LatLng(
         state.defaultLocationLat,
         state.defaultLocationLong
     )
 
+    Log.d("TAG", "LocationPicker: $location")
+
+
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(location, 10f)
     }
 
+
+
+
     val markerState = MarkerState(position = location)
 
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
     val sheetScope = rememberCoroutineScope()
 
     var showBottomSheet by remember { mutableStateOf(false) }
+
+
+
+    LaunchedEffect(
+        state.defaultLocationLat,
+        state.defaultLocationLong,
+        showBottomSheet
+        ) {
+        if(showBottomSheet) {
+            cameraPositionState.animate(
+                update = CameraUpdateFactory.newCameraPosition(
+                    CameraPosition(location, 12f, 0f, 0f)
+                ),
+                durationMs = 500
+            )
+        }
+
+    }
 
     if(showBottomSheet) {
         sheetScope.launch {
@@ -77,7 +110,8 @@ fun LocationPicker(
             onDismissRequest = {
                 showBottomSheet = false
             },
-            sheetState = sheetState
+            sheetState = sheetState,
+            modifier = Modifier.fillMaxSize()
         ) {
             Column(
                 modifier = Modifier.fillMaxSize()
@@ -95,6 +129,7 @@ fun LocationPicker(
                         newLocation.longitude = it.longitude
 
                         onMapClick(newLocation)
+
                     }
                 ) {
                     Marker(

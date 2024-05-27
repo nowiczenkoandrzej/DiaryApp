@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButtonColors
@@ -25,7 +26,8 @@ fun WeatherInfoPanel(
     modifier: Modifier = Modifier,
     location: String? = null,
     weatherInfo: WeatherInfo? = null,
-    onTrackLocationClick: () -> Unit
+    onTrackLocationClick: () -> Unit,
+    isLoading: Boolean = false
 ) {
 
     Row(
@@ -35,12 +37,15 @@ fun WeatherInfoPanel(
 
         Column {
             val locationText = if (location.isNullOrEmpty()) "no info" else location
+            val temperature = weatherInfo?.temperature?.toString() ?: "no info"
             Text(text = "Location: $locationText")
+
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
+                Text(text = "Temperature: $temperature")
                 weatherInfo?.let {
-                    Text(text = "Temperature: ${weatherInfo.temperature}")
                     Image(
                         painter = painterResource(id = weatherInfo.weatherType.toWeatherIcon()) ,
                         contentDescription = null,
@@ -52,12 +57,19 @@ fun WeatherInfoPanel(
 
         }
         Spacer(modifier = Modifier.weight(1F))
-        IconButton(onClick = { onTrackLocationClick() }) {
-            Icon(
-                imageVector = Icons.Default.LocationOn,
-                contentDescription = null
-            )
+
+        if(isLoading) {
+            CircularProgressIndicator()
+        } else {
+
+            IconButton(onClick = { onTrackLocationClick() }) {
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = null
+                )
+            }
         }
+
 
     }
     

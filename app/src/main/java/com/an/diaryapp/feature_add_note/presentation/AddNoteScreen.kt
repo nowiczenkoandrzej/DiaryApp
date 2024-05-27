@@ -86,11 +86,12 @@ fun AddNoteScreen(
 
         WeatherInfoPanel(
             modifier = Modifier.fillMaxWidth(),
-            location = state.location,
+            location = state.locationName,
             weatherInfo = state.weatherInfo,
             onTrackLocationClick = {
                 viewModel.getWeatherInfo()
-            }
+            },
+            isLoading = state.isWeatherInfoLoading
         )
 
         Row (

@@ -54,6 +54,8 @@ class SettingsViewModel @Inject constructor(
                     defaultLocationLat = locationPreferencesRepository.getDefaultLocation().latitude,
                     defaultLocationLong = locationPreferencesRepository.getDefaultLocation().longitude,
                 )
+
+
             }
         }
     }

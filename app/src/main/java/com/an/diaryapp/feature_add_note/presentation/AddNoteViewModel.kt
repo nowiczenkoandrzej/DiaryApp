@@ -9,6 +9,7 @@ import com.an.diaryapp.core.domain.model.Category
 import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.core.domain.model.Resource
 import com.an.diaryapp.core.domain.model.WeatherInfo
+import com.an.diaryapp.feature_location.domain.LocationPreferencesRepository
 import com.an.diaryapp.feature_notification.domain.NotificationPreferencesRepository
 import com.an.diaryapp.feature_location.domain.LocationRepository
 import com.an.diaryapp.feature_weather_api.domain.WeatherRepository
@@ -25,6 +26,7 @@ class AddNoteViewModel @Inject constructor(
     private val notificationPreferencesRepository: NotificationPreferencesRepository,
     private val weatherRepository: WeatherRepository,
     private val locationRepository: LocationRepository,
+    private val locationPreferencesRepository: LocationPreferencesRepository
 ): ViewModel() {
 
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
@@ -49,6 +51,32 @@ class AddNoteViewModel @Inject constructor(
                     _categories.value = result.data ?: emptyList()
                 }
             }
+
+            if(locationPreferencesRepository.getIsDefaultLocationPicked()) {
+                _screenState.value = screenState.value.copy(
+                    isWeatherInfoLoading = true
+                )
+
+                val defaultLocation = locationPreferencesRepository.getDefaultLocation()
+
+
+                val weatherInfo = weatherRepository.getWeatherInfo(
+                    defaultLocation.latitude,
+                    defaultLocation.longitude
+                )
+
+                _screenState.value = screenState.value.copy(
+                    locationName = locationPreferencesRepository.getDefaultLocationName(),
+                    defaultLocation = defaultLocation,
+                    weatherInfo = weatherInfo.data
+                )
+
+                _screenState.value = screenState.value.copy(
+                    isWeatherInfoLoading = false
+                )
+
+            }
+
         }
     }
 
@@ -87,7 +115,7 @@ class AddNoteViewModel @Inject constructor(
                     timestamp = state.timestamp,
                     categories = state.selectedCategory,
                     weatherInfo = state.weatherInfo,
-                    location = state.location
+                    location = state.locationName
                 )
             )
 
@@ -98,11 +126,15 @@ class AddNoteViewModel @Inject constructor(
     fun getWeatherInfo() {
         viewModelScope.launch {
 
+            _screenState.value = screenState.value.copy(
+                isWeatherInfoLoading = true
+            )
+
             locationRepository.getLocation()?.let { location ->
 
                 locationRepository.getCityNameFromLocation(location)?.let {
                     _screenState.value = screenState.value.copy(
-                        location = it
+                        locationName = it
                     )
                 }
 
@@ -114,7 +146,7 @@ class AddNoteViewModel @Inject constructor(
                 when(weatherInfo) {
                     is Resource.Success -> {
                         _screenState.value = screenState.value.copy(
-                            weatherInfo = weatherInfo.data
+                            weatherInfo = weatherInfo.data,
                         )
                     }
                     is Resource.Error -> {
@@ -122,6 +154,9 @@ class AddNoteViewModel @Inject constructor(
                     }
                 }
             }
+            _screenState.value = screenState.value.copy(
+                isWeatherInfoLoading = false
+            )
 
         }
     }
@@ -132,11 +167,6 @@ class AddNoteViewModel @Inject constructor(
         )
     }
 
-    fun showOrHideDatePickerDialog() {
-        _screenState.value = screenState.value.copy(
-            isDatePickerVisible = !screenState.value.isDatePickerVisible
-        )
-    }
 
     fun addTestNote() {
 
@@ -154,7 +184,7 @@ class AddNoteViewModel @Inject constructor(
                         weatherType = 81,
                         temperature = 25.0
                     ),
-                    location = state.location
+                    location = state.locationName
                 )
             )
 
