@@ -97,11 +97,6 @@ fun NotesListScreen(
 
     val listState = rememberLazyListState()
 
-    val sheetState = rememberModalBottomSheetState()
-    var isSheetOpen by rememberSaveable {
-        mutableStateOf(false)
-    }
-
 
     val focusManager = LocalFocusManager.current
 
@@ -114,11 +109,6 @@ fun NotesListScreen(
         mutableStateOf(value)
     }
 
-    val lifecycleState by LocalLifecycleOwner
-        .current
-        .lifecycle
-        .currentStateFlow
-        .collectAsState()
 
     val topAppBarColors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.primary,
@@ -134,19 +124,21 @@ fun NotesListScreen(
 
 
 
+    val lifecycleState by LocalLifecycleOwner
+        .current
+        .lifecycle
+        .currentStateFlow
+        .collectAsState()
 
     LaunchedEffect(lifecycleState) {
         when (lifecycleState) {
-            Lifecycle.State.DESTROYED -> {}
-            Lifecycle.State.INITIALIZED -> {}
             Lifecycle.State.CREATED -> {
                 viewModel.onEvent(NoteListEvent.GetNotes)
             }
-
-            Lifecycle.State.STARTED -> {}
             Lifecycle.State.RESUMED -> {
                 viewModel.onEvent(NoteListEvent.GetNotes)
             }
+            else -> {}
         }
     }
     LaunchedEffect(listState.isScrollInProgress) {

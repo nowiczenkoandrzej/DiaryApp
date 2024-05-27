@@ -1,5 +1,6 @@
 package com.an.diaryapp.feature_add_note.presentation
 
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,10 +21,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -61,6 +64,21 @@ fun AddNoteScreen(
 
     val hintText = rememberSaveable {
         NoteHintTexts.random()
+    }
+
+    val currentContext = LocalContext.current
+
+
+    val errorMessage = viewModel
+        .error
+        .collectAsState()
+        .value
+
+    LaunchedEffect(errorMessage) {
+        if(errorMessage != null) {
+            Toast.makeText(currentContext, errorMessage, Toast.LENGTH_SHORT).show()
+            viewModel.errorShown()
+        }
     }
 
     Column(

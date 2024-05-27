@@ -1,5 +1,6 @@
 package com.an.diaryapp.feature_add_note.presentation
 
+import android.location.Location
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -130,7 +131,42 @@ class AddNoteViewModel @Inject constructor(
                 isWeatherInfoLoading = true
             )
 
-            locationRepository.getLocation()?.let { location ->
+            var location: Location? = null
+
+            try {
+                location = locationRepository.getLocation()
+            } catch (e: Exception) {
+                _error.value = e.message
+            }
+
+
+            if(location != null ) {
+                locationRepository.getCityNameFromLocation(location)?.let {
+                    _screenState.value = screenState.value.copy(
+                        locationName = it
+                    )
+                }
+
+                val weatherInfo = weatherRepository.getWeatherInfo(
+                    lat = location.latitude,
+                    long = location.longitude
+                )
+
+                when(weatherInfo) {
+                    is Resource.Success -> {
+                        _screenState.value = screenState.value.copy(
+                            weatherInfo = weatherInfo.data,
+                        )
+                    }
+                    is Resource.Error -> {
+                        _error.value = weatherInfo.error
+
+                    }
+                }
+            } else _error.value = "Something went wrong :/"
+
+
+            /*locationRepository.getLocation()?.let { location ->
 
                 locationRepository.getCityNameFromLocation(location)?.let {
                     _screenState.value = screenState.value.copy(
@@ -150,10 +186,11 @@ class AddNoteViewModel @Inject constructor(
                         )
                     }
                     is Resource.Error -> {
-                        Log.d("TAG", "getWeatherInfo: ${weatherInfo.error}")
+                        _error.value = weatherInfo.error
+
                     }
                 }
-            }
+            }*/
             _screenState.value = screenState.value.copy(
                 isWeatherInfoLoading = false
             )
@@ -165,6 +202,10 @@ class AddNoteViewModel @Inject constructor(
         _screenState.value = screenState.value.copy(
             timestamp = date
         )
+    }
+
+    fun errorShown() {
+        _error.value = null
     }
 
 

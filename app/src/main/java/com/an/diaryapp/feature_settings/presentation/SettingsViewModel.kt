@@ -63,7 +63,6 @@ class SettingsViewModel @Inject constructor(
 
     fun onEvent(event: SettingsScreenEvent)  {
         when (event) {
-
             SettingsScreenEvent.CancelNotification -> cancel()
 
             is SettingsScreenEvent.Schedule -> schedule(event.time)
@@ -100,16 +99,24 @@ class SettingsViewModel @Inject constructor(
             }
 
             SettingsScreenEvent.CheckLocationSwitch ->  {
+
                 _locationState.value = locationState.value.copy(
                     isSwitchChecked = !locationState.value.isSwitchChecked
                 )
+
+                if(!locationState.value.isSwitchChecked) {
+                    viewModelScope.launch {
+                        locationPreferencesRepository.setIsDefaultLocationPicked(false)
+                    }
+                }
+
+
             }
             is SettingsScreenEvent.SetDefaultLocation -> {
                 saveDefaultLocation()
             }
             SettingsScreenEvent.ShowLocationDialog -> {}
             SettingsScreenEvent.GetLocation -> {
-
                 viewModelScope.launch {
                     val currentLocation = locationRepository.getLocation()
 

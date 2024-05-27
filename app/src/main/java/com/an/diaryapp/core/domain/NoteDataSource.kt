@@ -15,8 +15,6 @@ interface NoteDataSource {
 
     suspend fun getNotesByContent(content: String): List<GetNotesByContent>
 
-   // fun getNotesByCategory(id: Long): Flow<List<NoteEntity>>
-
     suspend fun addNote(noteItem: NoteItem)
 
     suspend fun getAllCategories(): List<CategoryEntity>
