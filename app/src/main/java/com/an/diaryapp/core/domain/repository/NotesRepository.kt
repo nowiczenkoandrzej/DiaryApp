@@ -3,7 +3,7 @@ package com.an.diaryapp.core.domain.repository
 import com.an.diaryapp.core.domain.model.Category
 import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.core.domain.model.Resource
-import com.an.diaryapp.core.domain.model.WeatherInfo
+import com.an.diaryapp.feature_note_list.domain.model.FilterType
 import java.time.LocalDate
 
 interface NotesRepository {
@@ -18,9 +18,8 @@ interface NotesRepository {
 
     suspend fun deleteNote(id: Long)
 
-    suspend fun getNoteFromDates(
-        startDate: LocalDate,
-        endDate: LocalDate
+    suspend fun getFilteredNotes(
+        filterType: FilterType
     ): Resource<List<NoteItem>>
 
 }

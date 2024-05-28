@@ -1,9 +1,12 @@
 package com.an.diaryapp.core.data.sql_delight
 
+import android.util.Log
 import com.an.diaryapp.NotesDatabase
 import com.an.diaryapp.core.domain.NoteDataSource
 import com.an.diaryapp.core.domain.model.NoteItem
+import com.an.diaryapp.feature_note_list.domain.model.FilterType
 import diaryapp.db.CategoryEntity
+import diaryapp.db.GetFilteredNote
 import diaryapp.db.GetNoteById
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -95,16 +98,22 @@ class NoteDataSourceImpl @Inject constructor(
         queries.deleteNote(id)
     }
 
-    override suspend fun getNoteFromDates(
-        startDate: LocalDate,
-        endDate: LocalDate
-    ): List<GetNotesByDates> {
-        return queries
-            .getNotesByDates(
-                from = startDate.toString(),
-                to = endDate.toString())
-            .executeAsList()
+    override suspend fun getFilteredNotes(filterType: FilterType): List<GetFilteredNote> {
+        return withContext(Dispatchers.IO) {
+
+            val result = queries
+                .getFilteredNote(
+                    startDate = filterType.startDate.toString(),
+                    endDate = filterType.endDate.toString(),
+                    category = filterType.category
+                )
+                .executeAsList()
+
+            Log.d("TAG", "getFilteredNotes onEvent: $result")
+            result
+        }
     }
+
 }
 
 

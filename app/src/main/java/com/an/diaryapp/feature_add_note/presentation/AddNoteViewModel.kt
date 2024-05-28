@@ -53,30 +53,7 @@ class AddNoteViewModel @Inject constructor(
                 }
             }
 
-            if(locationPreferencesRepository.getIsDefaultLocationPicked()) {
-                _screenState.value = screenState.value.copy(
-                    isWeatherInfoLoading = true
-                )
-
-                val defaultLocation = locationPreferencesRepository.getDefaultLocation()
-
-
-                val weatherInfo = weatherRepository.getWeatherInfo(
-                    defaultLocation.latitude,
-                    defaultLocation.longitude
-                )
-
-                _screenState.value = screenState.value.copy(
-                    locationName = locationPreferencesRepository.getDefaultLocationName(),
-                    defaultLocation = defaultLocation,
-                    weatherInfo = weatherInfo.data
-                )
-
-                _screenState.value = screenState.value.copy(
-                    isWeatherInfoLoading = false
-                )
-
-            }
+            getWeatherInfoFromDefaultLocation()
 
         }
     }
@@ -165,32 +142,34 @@ class AddNoteViewModel @Inject constructor(
                 }
             } else _error.value = "Something went wrong :/"
 
+            _screenState.value = screenState.value.copy(
+                isWeatherInfoLoading = false
+            )
 
-            /*locationRepository.getLocation()?.let { location ->
+        }
+    }
 
-                locationRepository.getCityNameFromLocation(location)?.let {
-                    _screenState.value = screenState.value.copy(
-                        locationName = it
-                    )
-                }
+    suspend fun getWeatherInfoFromDefaultLocation() {
 
-                val weatherInfo = weatherRepository.getWeatherInfo(
-                    lat = location.latitude,
-                    long = location.longitude
-                )
+        if(locationPreferencesRepository.getIsDefaultLocationPicked()) {
+            _screenState.value = screenState.value.copy(
+                isWeatherInfoLoading = true
+            )
 
-                when(weatherInfo) {
-                    is Resource.Success -> {
-                        _screenState.value = screenState.value.copy(
-                            weatherInfo = weatherInfo.data,
-                        )
-                    }
-                    is Resource.Error -> {
-                        _error.value = weatherInfo.error
+            val defaultLocation = locationPreferencesRepository.getDefaultLocation()
 
-                    }
-                }
-            }*/
+
+            val weatherInfo = weatherRepository.getWeatherInfo(
+                defaultLocation.latitude,
+                defaultLocation.longitude
+            )
+
+            _screenState.value = screenState.value.copy(
+                locationName = locationPreferencesRepository.getDefaultLocationName(),
+                defaultLocation = defaultLocation,
+                weatherInfo = weatherInfo.data
+            )
+
             _screenState.value = screenState.value.copy(
                 isWeatherInfoLoading = false
             )

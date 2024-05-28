@@ -62,8 +62,10 @@ import com.an.diaryapp.R
 import com.an.diaryapp.core.domain.model.Screen
 import com.an.diaryapp.feature_note_list.domain.model.NoteListEvent
 import com.an.diaryapp.feature_note_list.presentation.components.AppBarTextField
+import com.an.diaryapp.feature_note_list.presentation.components.CategoryPicker
 import com.an.diaryapp.feature_note_list.presentation.components.ListCategory
 import com.an.diaryapp.feature_note_list.presentation.components.DeleteNoteDialog
+import com.an.diaryapp.feature_note_list.presentation.components.FilteringSheet
 import com.an.diaryapp.feature_note_list.presentation.components.NoteListItem
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarView
@@ -87,6 +89,11 @@ fun NotesListScreen(
         .collectAsState()
         .value
 
+    val categories = viewModel
+        .categories
+        .collectAsState()
+        .value
+
     var showDeleteNoteDialog by remember {
         mutableStateOf(false)
     }
@@ -101,14 +108,6 @@ fun NotesListScreen(
     val focusManager = LocalFocusManager.current
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
-    val mainCalendarState = rememberSheetState()
-
-    val selectedDateRange = remember {
-        val value = Range(LocalDate.now().minusDays(7), LocalDate.now())
-        mutableStateOf(value)
-    }
-
 
     val topAppBarColors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.primary,
@@ -169,71 +168,17 @@ fun NotesListScreen(
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetContent = {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
+            FilteringSheet(
+                categories = categories,
+                onSaveFilters = {
+                    Log.d("TAG", "NotesListScreen onEvent: $it ")
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-
-                ) {
-                    HorizontalDivider(
-                        color = MaterialTheme.colorScheme.primary,
-                        thickness = 1.dp,
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    Text(
-                        text = "Date range",
-                        modifier = Modifier
-                            .padding(start = 8.dp, end = 8.dp)
-                    )
-
-                    HorizontalDivider(
-                        color = MaterialTheme.colorScheme.primary,
-                        thickness = 1.dp,
-                        modifier = Modifier.weight(1f)
-                    )
+                    viewModel.onEvent(NoteListEvent.GetFilteredNotes(it))
+                    /*scope.launch {
+                        scaffoldState.bottomSheetState.hide()
+                    }*/
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-
-                CalendarView(
-                    sheetState = mainCalendarState,
-                    config = CalendarConfig(
-                        style = CalendarStyle.MONTH
-                    ),
-                    selection = CalendarSelection.Period(
-                        selectedRange = selectedDateRange.value
-                    ) { startDate, endDate ->
-                        selectedDateRange.value = Range(startDate, endDate)
-                    }
-                )
-
-                CalendarView(
-                    sheetState = mainCalendarState,
-                    config = CalendarConfig(
-                        style = CalendarStyle.MONTH
-                    ),
-                    selection = CalendarSelection.Period(
-                        selectedRange = selectedDateRange.value
-                    ) { startDate, endDate ->
-                        selectedDateRange.value = Range(startDate, endDate)
-                    }
-                )
-
-
-                Spacer(modifier = Modifier.height(40.dp))
-
-            }
+            )
         },
         sheetPeekHeight = 0.dp
 

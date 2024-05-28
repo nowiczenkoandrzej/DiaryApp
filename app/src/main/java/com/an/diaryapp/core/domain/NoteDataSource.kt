@@ -2,7 +2,9 @@ package com.an.diaryapp.core.domain
 
 import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.core.domain.model.Resource
+import com.an.diaryapp.feature_note_list.domain.model.FilterType
 import diaryapp.db.CategoryEntity
+import diaryapp.db.GetFilteredNote
 import diaryapp.db.GetNoteById
 import diaryapp.db.GetNotesByContent
 import diaryapp.db.GetNotesByDates
@@ -27,9 +29,8 @@ interface NoteDataSource {
 
     suspend fun deleteNote(id: Long)
 
-    suspend fun getNoteFromDates(
-        startDate: LocalDate,
-        endDate: LocalDate
-    ): List<GetNotesByDates>
+    suspend fun getFilteredNotes(
+        filterType: FilterType
+    ): List<GetFilteredNote>
 
 }

@@ -23,12 +23,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import com.an.diaryapp.core.domain.model.Screen
 import com.an.diaryapp.feature_add_note.domain.NoteHintTexts
@@ -80,6 +83,22 @@ fun AddNoteScreen(
             viewModel.errorShown()
         }
     }
+
+    val lifecycleState by LocalLifecycleOwner
+        .current
+        .lifecycle
+        .currentStateFlow
+        .collectAsState()
+
+    LaunchedEffect(lifecycleState) {
+        when(lifecycleState) {
+            Lifecycle.State.STARTED ->  {
+                viewModel.getWeatherInfoFromDefaultLocation()
+            }
+            else -> {}
+        }
+    }
+
 
     Column(
         modifier = Modifier

@@ -60,6 +60,32 @@ LEFT JOIN
 WHERE noteEntity.description LIKE ('%' || :content || '%')
 ORDER BY noteEntity.timestamp DESC;
 
+getFilteredNote:
+SELECT
+    noteEntity.id AS note_id,
+    noteEntity.description,
+    noteEntity.timestamp,
+    noteEntity.weather_id,
+    noteEntity.location,
+    weatherEntity.temperature,
+    weatherEntity.weather_type,
+    categoryEntity.id AS category_id,
+    categoryEntity.background_color,
+    categoryEntity.name
+FROM
+        noteEntity
+LEFT JOIN
+    weatherEntity ON noteEntity.weather_id = weatherEntity.id
+LEFT JOIN
+    notes_categories ON noteEntity.id = notes_categories.note_id
+LEFT JOIN
+    categoryEntity ON notes_categories.category_id = categoryEntity.id
+WHERE
+    (:startDate IS NULL OR noteEntity.timestamp >= :startDate)
+    AND (:endDate IS NULL OR noteEntity.timestamp <= :endDate)
+    AND (:category IS NULL OR categoryEntity.name = :category)
+ORDER BY noteEntity.timestamp DESC;
+
 getNotesByDates:
 SELECT
     noteEntity.id AS note_id,
@@ -82,6 +108,8 @@ LEFT JOIN
     categoryEntity ON notes_categories.category_id = categoryEntity.id
 WHERE noteEntity.timestamp BETWEEN :from AND :to
 ORDER BY noteEntity.timestamp DESC;
+
+
 
 insertNote:
 INSERT OR REPLACE
