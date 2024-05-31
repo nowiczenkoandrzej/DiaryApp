@@ -3,11 +3,13 @@ package com.an.diaryapp.core.data.sql_delight
 import android.util.Log
 import com.an.diaryapp.NotesDatabase
 import com.an.diaryapp.core.domain.NoteDataSource
+import com.an.diaryapp.core.domain.model.Category
 import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.feature_note_list.domain.model.FilterType
 import diaryapp.db.CategoryEntity
-import diaryapp.db.GetFilteredNote
+import diaryapp.db.GetNotesByDateAndCategory
 import diaryapp.db.GetNoteById
+import diaryapp.db.GetNotesByCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -98,18 +100,46 @@ class NoteDataSourceImpl @Inject constructor(
         queries.deleteNote(id)
     }
 
-    override suspend fun getFilteredNotes(filterType: FilterType): List<GetFilteredNote> {
+    override suspend fun getNotesByDateAndCategory(
+        startDate: LocalDate,
+        endDate: LocalDate,
+        category: Category
+    ): List<GetNotesByDateAndCategory> {
         return withContext(Dispatchers.IO) {
 
             val result = queries
-                .getFilteredNote(
-                    startDate = filterType.startDate.toString(),
-                    endDate = filterType.endDate.toString(),
-                    category = filterType.category
+                .getNotesByDateAndCategory(
+                    startDate = startDate.toString(),
+                    endDate = endDate.toString(),
+                    category = category.name
                 )
                 .executeAsList()
 
-            Log.d("TAG", "getFilteredNotes onEvent: $result")
+            Log.d("TAG", "getNotesByDateAndCategory onEvent: $result")
+            result
+        }
+    }
+
+    override suspend fun getNotesByDate(
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): List<GetNotesByDates> {
+        return withContext(Dispatchers.IO) {
+            val result = queries
+                .getNotesByDates(
+                    from = startDate.toString(),
+                    to = endDate.toString()
+                ).executeAsList()
+            result
+        }
+    }
+
+    override suspend fun getNotesByCategory(category: Category): List<GetNotesByCategory> {
+        return withContext(Dispatchers.IO) {
+            val result = queries
+                .getNotesByCategory(
+                    category = category.name
+                ).executeAsList()
             result
         }
     }

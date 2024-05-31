@@ -45,7 +45,7 @@ fun FilteringSheet(
         mutableStateOf<Range<LocalDate>?>(value)
     }
 
-    var selectedCategory: String? = null
+    var selectedCategory: Category? = null
 
     val mainCalendarState = rememberSheetState()
 
@@ -118,7 +118,7 @@ fun FilteringSheet(
             modifier = Modifier.fillMaxWidth(),
             categories = categories,
             onSelect = {
-                selectedCategory = it
+                selectedCategory = Category(backgroundColor = "", name = it)
             }
         )
 

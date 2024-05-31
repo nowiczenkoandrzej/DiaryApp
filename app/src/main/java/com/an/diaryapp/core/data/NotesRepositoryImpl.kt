@@ -7,6 +7,8 @@ import com.an.diaryapp.core.domain.model.NoteItem
 import com.an.diaryapp.core.domain.model.Resource
 import com.an.diaryapp.core.domain.model.WeatherInfo
 import com.an.diaryapp.feature_note_list.domain.model.FilterType
+import diaryapp.db.GetNotesByCategory
+import diaryapp.db.GetNotesByDates
 import java.time.LocalDate
 import javax.inject.Inject
 class NotesRepositoryImpl @Inject constructor(
@@ -140,9 +142,15 @@ class NotesRepositoryImpl @Inject constructor(
 
     override suspend fun getFilteredNotes(filterType: FilterType): Resource<List<NoteItem>> {
 
+
+
+
+
         return try {
-            val notes = db.getFilteredNotes(
-                filterType
+            val notes = db.getNotesByDateAndCategory(
+                filterType.startDate!!,
+                filterType.endDate!!,
+                filterType.category!!
             ).groupBy { it.note_id}
                 .map {(_, group) ->
                     val firstRow = group.first()
@@ -187,54 +195,14 @@ class NotesRepositoryImpl @Inject constructor(
         }
 
     }
-        /*return try {
-            val notes = db.getNoteFromDates(
-                startDate = startDate,
-                endDate = endDate
-            ).groupBy { it.note_id }
-                .map { (_, group) ->
-
-
-                    val firstRow = group.first()
-                    val isWeatherInfoAttached = firstRow.weather_id != null
-                    val isCategoryListEmpty = firstRow.category_id == null
-
-                    NoteItem(
-                        id = firstRow.note_id,
-                        description = firstRow.description,
-                        location = firstRow.location,
-                        timestamp = LocalDate.parse(firstRow.timestamp),
-                        categories = if(isCategoryListEmpty) {
-                            emptyList()
-                        } else {
-                            group.map {
-                                Category(
-                                    id = it.category_id,
-                                    backgroundColor = it.background_color.toString(),
-                                    name = it.name.toString()
-                                )
-                            }
-                        },
-                        weatherInfo = if(isWeatherInfoAttached) {
-                            WeatherInfo(
-                                id = firstRow.weather_id,
-                                temperature = firstRow.temperature!!,
-                                weatherType = firstRow.weather_type!!
-                            )
-                        } else {
-                            null
-                        }
-                    )
-                }
-            Resource.Success(
-                data = notes
-            )
-
-        } catch (e: Exception) {
-            Resource.Error(e.message.toString())
-        }
-    }*/
-
 
 }
+
+/*fun <T> getAndMapNotes(
+    list: List<T>
+) where T: GetNotesByCategory,  {
+    list.groupBy {
+    }
+}*/
+
 
