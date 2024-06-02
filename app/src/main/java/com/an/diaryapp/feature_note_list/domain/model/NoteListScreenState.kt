@@ -7,4 +7,5 @@ data class NoteListScreenState(
     val notes: List<NoteItem> = emptyList(),
     val searchBarText: String = "",
     val isSearchBarActive: Boolean = false,
+    val areFiltersActive: Boolean = false
 )

@@ -50,6 +50,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -66,6 +67,7 @@ import com.an.diaryapp.feature_note_list.presentation.components.CategoryPicker
 import com.an.diaryapp.feature_note_list.presentation.components.ListCategory
 import com.an.diaryapp.feature_note_list.presentation.components.DeleteNoteDialog
 import com.an.diaryapp.feature_note_list.presentation.components.FilteringSheet
+import com.an.diaryapp.feature_note_list.presentation.components.NoteDisplay
 import com.an.diaryapp.feature_note_list.presentation.components.NoteListItem
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarView
@@ -132,10 +134,14 @@ fun NotesListScreen(
     LaunchedEffect(lifecycleState) {
         when (lifecycleState) {
             Lifecycle.State.CREATED -> {
-                viewModel.onEvent(NoteListEvent.GetNotes)
+                if(!state.areFiltersActive) {
+                    viewModel.onEvent(NoteListEvent.GetNotes)
+                }
             }
             Lifecycle.State.RESUMED -> {
-                viewModel.onEvent(NoteListEvent.GetNotes)
+                if(!state.areFiltersActive) {
+                    viewModel.onEvent(NoteListEvent.GetNotes)
+                }
             }
             else -> {}
         }
@@ -146,6 +152,7 @@ fun NotesListScreen(
             focusManager.clearFocus(true)
         }
     }
+
 
     if (showDeleteNoteDialog) {
         DeleteNoteDialog(
@@ -177,6 +184,9 @@ fun NotesListScreen(
                     /*scope.launch {
                         scaffoldState.bottomSheetState.hide()
                     }*/
+                },
+                onClearFilters = {
+                    viewModel.onEvent(NoteListEvent.ClearFilters)
                 }
             )
         },
@@ -247,15 +257,25 @@ fun NotesListScreen(
                             ListCategory(
                                 title = "${month.toString()} ${notes.first().timestamp.year}",
                                 modifier = Modifier
-                                    .background(
-                                        MaterialTheme.colorScheme.primaryContainer
-                                    )
                                     .fillMaxWidth()
-                                    .height(48.dp),
+                                    .height(48.dp)
+                                    .background(Color.White),
                             )
                         }
                         items(notes) { note ->
-                            NoteListItem(
+                            /*NoteListItem(
+                                noteItem = note,
+                                onClick = {
+                                    navController.navigate(
+                                        Screen.NoteDetails.passId(note.id!!)
+                                    )
+                                },
+                                onLongClick = {
+                                    showDeleteNoteDialog = true
+                                    deletedNoteId = note.id!!
+                                }
+                            )*/
+                            NoteDisplay(
                                 noteItem = note,
                                 onClick = {
                                     navController.navigate(
@@ -267,7 +287,6 @@ fun NotesListScreen(
                                     deletedNoteId = note.id!!
                                 }
                             )
-                            Spacer(modifier = Modifier.height(4.dp))
                         }
                     }
                 }
@@ -275,90 +294,8 @@ fun NotesListScreen(
 
 
         }
-        /*if(isSheetOpen) {
-            ModalBottomSheet(
-                sheetState = sheetState,
-                onDismissRequest = { isSheetOpen = false },
-                dragHandle = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "Filters",
-                            fontSize = 24.sp
-                        )
-                    }
-                }
-            ) {
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-
-                    ) {
-                        HorizontalDivider(
-                            color = MaterialTheme.colorScheme.primary,
-                            thickness = 1.dp,
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        Text(
-                            text = "Date range",
-                            modifier = Modifier
-                                .padding(start = 8.dp, end = 8.dp)
-                        )
-
-                        HorizontalDivider(
-                            color = MaterialTheme.colorScheme.primary,
-                            thickness = 1.dp,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
 
 
-                    CalendarView(
-                        sheetState = mainCalendarState,
-                        config = CalendarConfig(
-                            style = CalendarStyle.MONTH
-                        ),
-                        selection = CalendarSelection.Period(
-                            selectedRange = selectedDateRange.value
-                        ) { startDate, endDate ->
-                            selectedDateRange.value = Range(startDate, endDate)
-                        }
-                    )
-
-                    CalendarView(
-                        sheetState = mainCalendarState,
-                        config = CalendarConfig(
-                            style = CalendarStyle.MONTH
-                        ),
-                        selection = CalendarSelection.Period(
-                            selectedRange = selectedDateRange.value
-                        ) { startDate, endDate ->
-                            selectedDateRange.value = Range(startDate, endDate)
-                        }
-                    )
-
-
-                    Spacer(modifier = Modifier.height(40.dp))
-
-                }
-            }
-        }*/
     }
 }
 

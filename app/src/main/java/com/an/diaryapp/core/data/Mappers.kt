@@ -2,7 +2,6 @@ package com.an.diaryapp.core.data
 
 import com.an.diaryapp.R
 import com.an.diaryapp.core.domain.model.Category
-import com.an.diaryapp.core.domain.model.WeatherInfo
 import diaryapp.db.CategoryEntity
 
 fun CategoryEntity.toCategory() = Category(
@@ -12,6 +11,8 @@ fun CategoryEntity.toCategory() = Category(
 )
 
 fun List<CategoryEntity>.toCategoryList() = this.map { it.toCategory() }
+
+
 
 
 fun Long.toWeatherIcon(): Int {

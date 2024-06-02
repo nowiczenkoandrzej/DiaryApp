@@ -7,5 +7,6 @@ sealed class NoteListEvent{
     data class RemoveNote(val noteId: Long): NoteListEvent()
     data class TypeSearchBar(val text: String): NoteListEvent()
     data class GetFilteredNotes(val filterType: FilterType): NoteListEvent()
+    object ClearFilters: NoteListEvent()
     object ActiveSearchBar: NoteListEvent()
 }

@@ -1,7 +1,0 @@
-CREATE TABLE IF NOT EXISTS weatherEntity (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    temperature REAL NOT NULL,
-    weather_type INTEGER NOT NULL
-);
-
-

@@ -28,9 +28,6 @@ class NotesListViewModel @Inject constructor(
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
     val categories = _categories.asStateFlow()
 
-    private val _filterType = MutableStateFlow(FilterType())
-    val filterType = _filterType.asStateFlow()
-
     private var searchJob: Job? = null
 
 
@@ -45,17 +42,13 @@ class NotesListViewModel @Inject constructor(
                     _categories.value = result.data ?: emptyList()
                 }
             }
-
         }
-
     }
 
     fun onEvent(event: NoteListEvent) {
         when(event) {
             is NoteListEvent.GetNotes -> {
-                viewModelScope.launch {
-                    getNotes()
-                }
+                viewModelScope.launch { getNotes() }
             }
             is NoteListEvent.RemoveNote -> {
                 viewModelScope.launch {
@@ -83,27 +76,33 @@ class NotesListViewModel @Inject constructor(
                 viewModelScope.launch {
                     val filteredNotes = notesRepository.getFilteredNotes(event.filterType)
 
-                    Log.d("TAG", "onEvent: ${filteredNotes.data}")
-
                     when(filteredNotes) {
                         is Resource.Error -> {}
                         is Resource.Success ->  {
                             _screenState.value = screenState.value.copy(
-                                notes = filteredNotes.data!!
+                                notes = filteredNotes.data!!,
+                                areFiltersActive = true
                             )
                         }
                     }
+                }
+            }
 
-
+            NoteListEvent.ClearFilters -> {
+                viewModelScope.launch {
+                    getNotes()
+                    _screenState.value = screenState.value.copy(
+                        areFiltersActive = false
+                    )
                 }
             }
         }
     }
 
     private suspend fun getNotes() {
-        val notes = notesRepository.getNotes()
+        val notes = notesRepository.getNotes(screenState.value.searchBarText)
         when(notes) {
-            is Resource.Error -> {}
+            is Resource.Error -> Log.d("TAG", "getNotes: ${notes.error}")
             is Resource.Success ->  {
                 _screenState.value = screenState.value.copy(
                     notes = notes.data ?: emptyList()

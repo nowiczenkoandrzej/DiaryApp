@@ -1,3 +1,5 @@
+
+
 CREATE TABLE IF NOT EXISTS noteEntity  (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     description TEXT NOT NULL,
@@ -7,7 +9,11 @@ CREATE TABLE IF NOT EXISTS noteEntity  (
     FOREIGN KEY (weather_id) REFERENCES weatherEntity(id)
 );
 
-
+CREATE TABLE IF NOT EXISTS weatherEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    temperature REAL NOT NULL,
+    weather_type INTEGER NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS notes_categories (
     note_id INTEGER,
@@ -15,18 +21,24 @@ CREATE TABLE IF NOT EXISTS notes_categories (
     PRIMARY KEY (note_id, category_id)
 );
 
-getNoteById:
+CREATE TABLE IF NOT EXISTS categoryEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    background_color TEXT NOT NULL,
+    name TEXT NOT NULL
+);
+
+CREATE VIEW IF NOT EXISTS note_view AS
 SELECT
     noteEntity.id AS note_id,
-    noteEntity.description,
-    noteEntity.timestamp,
-    noteEntity.weather_id,
-    noteEntity.location,
-    weatherEntity.temperature,
-    weatherEntity.weather_type,
+    noteEntity.description AS note_content,
+    noteEntity.timestamp AS timestamp,
+    noteEntity.weather_id AS weather_id,
+    noteEntity.location AS location,
+    weatherEntity.temperature AS temperature,
+    weatherEntity.weather_type AS weather_type,
     categoryEntity.id AS category_id,
-    categoryEntity.background_color,
-    categoryEntity.name
+    categoryEntity.background_color AS bg_color,
+    categoryEntity.name AS category_name
 FROM
     noteEntity
 LEFT JOIN
@@ -34,104 +46,41 @@ LEFT JOIN
 LEFT JOIN
     notes_categories ON noteEntity.id = notes_categories.note_id
 LEFT JOIN
-    categoryEntity ON notes_categories.category_id = categoryEntity.id
-WHERE noteEntity.id = :id;
+    categoryEntity ON notes_categories.category_id = categoryEntity.id;
+
+getNoteById:
+SELECT *
+FROM note_view
+WHERE note_id = :id;
 
 getNotesByContent:
-SELECT
-    noteEntity.id AS note_id,
-    noteEntity.description,
-    noteEntity.timestamp,
-    noteEntity.weather_id,
-    noteEntity.location,
-    weatherEntity.temperature,
-    weatherEntity.weather_type,
-    categoryEntity.id AS category_id,
-    categoryEntity.background_color,
-    categoryEntity.name
-FROM
-    noteEntity
-LEFT JOIN
-    weatherEntity ON noteEntity.weather_id = weatherEntity.id
-LEFT JOIN
-    notes_categories ON noteEntity.id = notes_categories.note_id
-LEFT JOIN
-    categoryEntity ON notes_categories.category_id = categoryEntity.id
-WHERE noteEntity.description LIKE ('%' || :content || '%')
-ORDER BY noteEntity.timestamp DESC;
+SELECT *
+FROM note_view
+WHERE note_content LIKE ('%' || :content || '%')
+ORDER BY timestamp DESC;
+
 
 getNotesByDateAndCategory:
-SELECT
-    noteEntity.id AS note_id,
-    noteEntity.description,
-    noteEntity.timestamp,
-    noteEntity.weather_id,
-    noteEntity.location,
-    weatherEntity.temperature,
-    weatherEntity.weather_type,
-    categoryEntity.id AS category_id,
-    categoryEntity.background_color,
-    categoryEntity.name
-FROM
-        noteEntity
-LEFT JOIN
-    weatherEntity ON noteEntity.weather_id = weatherEntity.id
-LEFT JOIN
-    notes_categories ON noteEntity.id = notes_categories.note_id
-LEFT JOIN
-    categoryEntity ON notes_categories.category_id = categoryEntity.id
+SELECT *
+FROM note_view
 WHERE
-    (noteEntity.timestamp >= :startDate)
-    AND (noteEntity.timestamp <= :endDate)
-    AND (categoryEntity.name = :category)
-ORDER BY noteEntity.timestamp DESC;
+    (timestamp >= :startDate)
+    AND (timestamp <= :endDate)
+    AND (category_name = :category)
+ORDER BY timestamp DESC;
 
 getNotesByCategory:
-SELECT
-    noteEntity.id AS note_id,
-    noteEntity.description,
-    noteEntity.timestamp,
-    noteEntity.weather_id,
-    noteEntity.location,
-    weatherEntity.temperature,
-    weatherEntity.weather_type,
-    categoryEntity.id AS category_id,
-    categoryEntity.background_color,
-    categoryEntity.name
-FROM
-        noteEntity
-LEFT JOIN
-    weatherEntity ON noteEntity.weather_id = weatherEntity.id
-LEFT JOIN
-    notes_categories ON noteEntity.id = notes_categories.note_id
-LEFT JOIN
-    categoryEntity ON notes_categories.category_id = categoryEntity.id
+SELECT *
+FROM note_view
 WHERE
-    categoryEntity.name = :category
-ORDER BY noteEntity.timestamp DESC;
+    category_name = :category
+ORDER BY timestamp DESC;
 
 getNotesByDates:
-SELECT
-    noteEntity.id AS note_id,
-    noteEntity.description,
-    noteEntity.timestamp,
-    noteEntity.weather_id,
-    noteEntity.location,
-    weatherEntity.temperature,
-    weatherEntity.weather_type,
-    categoryEntity.id AS category_id,
-    categoryEntity.background_color,
-    categoryEntity.name
-FROM
-    noteEntity
-LEFT JOIN
-    weatherEntity ON noteEntity.weather_id = weatherEntity.id
-LEFT JOIN
-    notes_categories ON noteEntity.id = notes_categories.note_id
-LEFT JOIN
-    categoryEntity ON notes_categories.category_id = categoryEntity.id
-WHERE noteEntity.timestamp BETWEEN :from AND :to
-ORDER BY noteEntity.timestamp DESC;
+SELECT *
+FROM note_view
+WHERE timestamp BETWEEN :from AND :to
+ORDER BY timestamp DESC;
 
 
 

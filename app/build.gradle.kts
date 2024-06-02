@@ -97,8 +97,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
     // SqlDelight
-    implementation("app.cash.sqldelight:android-driver:2.0.1")
-    implementation("app.cash.sqldelight:coroutines-extensions-jvm:2.0.1")
+    implementation("app.cash.sqldelight:android-driver:2.0.2")
+    implementation("app.cash.sqldelight:coroutines-extensions-jvm:2.0.2")
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.44")
@@ -143,13 +143,14 @@ dependencies {
     // Google Maps SDK
     implementation("com.google.maps.android:maps-compose:4.3.3")
 
+
 }
 
 sqldelight {
     databases {
         create("NotesDatabase") {
             packageName.set("com.an.diaryapp")
-            version = 2
+            version = 3
         }
     }
 }

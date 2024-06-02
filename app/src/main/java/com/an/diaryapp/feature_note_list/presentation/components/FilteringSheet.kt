@@ -33,7 +33,8 @@ import java.time.LocalDate
 @Composable
 fun FilteringSheet(
     categories: List<Category>,
-    onSaveFilters: (FilterType) -> Unit
+    onSaveFilters: (FilterType) -> Unit,
+    onClearFilters: () -> Unit
 ) {
 
     val selectedDateRange = remember {
@@ -81,7 +82,10 @@ fun FilteringSheet(
             )*/
 
 
-            Text(text = "Select Filters")
+            OutlinedButton(onClick = { onClearFilters() }) {
+                Text(text = "Clear")
+            }
+
             Spacer(modifier = Modifier.weight(1f))
             OutlinedButton(onClick = {
 
@@ -109,7 +113,8 @@ fun FilteringSheet(
                 selectedRange = selectedDateRange.value
             ) { startDate, endDate ->
                 selectedDateRange.value = Range(startDate, endDate)
-            }
+            },
+
         )
 
         Spacer(modifier = Modifier.height(20.dp))
