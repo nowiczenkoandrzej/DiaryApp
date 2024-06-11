@@ -143,5 +143,4 @@ In note details screen app uses collected weather info to choose background and 
 
 ![Sunny background](images/cloudyweather.gif)
 
-![Sunny background](images/notes-details-rainy-portrait.png)
 
