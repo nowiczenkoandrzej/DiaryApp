@@ -205,7 +205,7 @@ fun AddNoteScreen(
                 text = "Add new Note"
             )
         }
-        Button(
+        /*Button(
             onClick = {
                 viewModel.addTestNote()
             },
@@ -214,7 +214,8 @@ fun AddNoteScreen(
             Text(
                 text = "test"
             )
-        }
+
+        }*/
 
     }
 

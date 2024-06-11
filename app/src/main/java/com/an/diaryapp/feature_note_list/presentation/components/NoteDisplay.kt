@@ -82,20 +82,13 @@ fun NoteDisplay(
                 .padding(8.dp)
         )
 
-        val dividerHeight = columnHeightDp + 8.dp
 
-        VerticalDivider(
-            modifier = Modifier
-                .height(columnHeightDp)
-                .width(4.dp)
-                .padding(4.dp)
-                .background(color = Color.Gray))
-
+        Spacer(modifier = Modifier.width(8.dp))
 
         Box(
             modifier = Modifier
                 .weight(1f)
-                
+                .padding(4.dp)
 
         ) {
 

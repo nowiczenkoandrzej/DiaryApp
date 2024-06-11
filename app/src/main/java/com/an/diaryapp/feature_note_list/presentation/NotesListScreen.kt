@@ -6,13 +6,16 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -36,6 +39,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -52,6 +56,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
@@ -233,67 +239,101 @@ fun NotesListScreen(
             )
         }
     ) { padding ->
-        Column(
+
+
+        val localDensity = LocalDensity.current
+
+
+        // Create element height in dp state
+        var columnHeightDp by remember {
+            mutableStateOf(0.dp)
+        }
+
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .onGloballyPositioned { coordinates ->
+                    columnHeightDp = with(localDensity) {
+                        coordinates.size.height.toDp()
+                    }
+                }
         ) {
 
-            val groupedByYear = state.notes.groupBy { it.timestamp.year }
 
-
-            LazyColumn(
+            VerticalDivider(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1F),
-                state = listState
+                    .height(columnHeightDp)
+                    .width(4.dp)
+                    .padding(start = 56.dp)
+                    .background(color = Color.Gray))
+
+
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
             ) {
 
-                groupedByYear.forEach { year, notes ->
-                    val groupByMonth = notes.groupBy { it.timestamp.month }
+                val groupedByYear = state.notes.groupBy { it.timestamp.year }
 
-                    groupByMonth.forEach { month, notes ->
-                        stickyHeader {
-                            ListCategory(
-                                title = "${month.toString()} ${notes.first().timestamp.year}",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(48.dp)
-                                    .background(Color.White),
-                            )
-                        }
-                        items(notes) { note ->
-                            /*NoteListItem(
-                                noteItem = note,
-                                onClick = {
-                                    navController.navigate(
-                                        Screen.NoteDetails.passId(note.id!!)
-                                    )
-                                },
-                                onLongClick = {
-                                    showDeleteNoteDialog = true
-                                    deletedNoteId = note.id!!
-                                }
-                            )*/
-                            NoteDisplay(
-                                noteItem = note,
-                                onClick = {
-                                    navController.navigate(
-                                        Screen.NoteDetails.passId(note.id!!)
-                                    )
-                                },
-                                onLongClick = {
-                                    showDeleteNoteDialog = true
-                                    deletedNoteId = note.id!!
-                                }
-                            )
+
+
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1F),
+                    state = listState
+                ) {
+
+                    groupedByYear.forEach { year, notes ->
+                        val groupByMonth = notes.groupBy { it.timestamp.month }
+
+                        groupByMonth.forEach { month, notes ->
+                            stickyHeader {
+                                ListCategory(
+                                    title = "${month.toString()} ${notes.first().timestamp.year}",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(48.dp)
+                                        .background(Color.White),
+                                )
+                            }
+                            items(notes) { note ->
+                                /*NoteListItem(
+                                    noteItem = note,
+                                    onClick = {
+                                        navController.navigate(
+                                            Screen.NoteDetails.passId(note.id!!)
+                                        )
+                                    },
+                                    onLongClick = {
+                                        showDeleteNoteDialog = true
+                                        deletedNoteId = note.id!!
+                                    }
+                                )*/
+                                NoteDisplay(
+                                    noteItem = note,
+                                    onClick = {
+                                        navController.navigate(
+                                            Screen.NoteDetails.passId(note.id!!)
+                                        )
+                                    },
+                                    onLongClick = {
+                                        showDeleteNoteDialog = true
+                                        deletedNoteId = note.id!!
+                                    }
+                                )
+                            }
                         }
                     }
                 }
+
+
             }
 
-
         }
+
 
 
     }
