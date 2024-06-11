@@ -2,6 +2,17 @@
 
 A diary app allows users to write and store personal journal entries.
 
+App was built with: 
+* Kotlin
+* Jetpack Compose
+* Sql Delight
+* DataStore
+* Hilt
+* Ktor Client
+* Play Location Services
+* Google Maps SDK
+* Maxkeppeler Caledar and Clock
+
 Features:
 
  * **Local Storage:** Store your notes securely on your device.
